@@ -23,7 +23,7 @@ ICS 372 GROUP PROJECTS
 * Select your changes from your fork into the main branch
 
 # GET CHANGES FROM MAIN REPO INTO YOUR FORK
-* since you added an upstream to main repo (run: git pull upstream)
+* since you added an upstream to main repo (run: git pull upstream master)
 
 # EXPLAINATION OF HOW JSON WORKS IN JAVA
 * https://www.geeksforgeeks.org/parse-json-java/
