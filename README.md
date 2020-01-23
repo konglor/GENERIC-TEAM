@@ -25,5 +25,12 @@ ICS 372 GROUP PROJECTS
 # GET CHANGES FROM MAIN REPO INTO YOUR FORK
 * since you added an upstream to main repo (run: git pull upstream master)
 
+# ADD WEBHOOK TO YOUR REPOSITORY SO ALL MEMBERS ARE NOTIFIED WHEN NEW COMMITS ARE PUSHED
+* github repository > Settings tab > Webhooks > Add Webhooks
+* Payload URL: the-URL-is-found-inside-readme-channel
+* Content Type: application/json
+* Select: Send me Everything
+* Click Add webhook
+
 # EXPLAINATION OF HOW JSON WORKS IN JAVA
 * https://www.geeksforgeeks.org/parse-json-java/
