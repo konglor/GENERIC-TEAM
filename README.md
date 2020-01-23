@@ -25,5 +25,5 @@ ICS 372 GROUP PROJECTS
 # GET CHANGES FROM MAIN REPO INTO YOUR FORK
 * since you added an upstream to main repo (run: git pull upstream)
 
-# EXPLAINTION OF HOW JSON WORKS IN JAVA
+# EXPLAINATION OF HOW JSON WORKS IN JAVA
 * https://www.geeksforgeeks.org/parse-json-java/
