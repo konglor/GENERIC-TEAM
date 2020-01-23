@@ -14,12 +14,16 @@ ICS 372 GROUP PROJECTS
 # DEV WORKFLOW
 * Fork your own repository
 * Clone your fork
+* add an upstream to the main repo so you can pull changes from the main repo to your fork (git remote add upstream https://github.com/Bossmanswift/GENERIC-TEAM.git)
 * Commit to your fork
 * Go to the main repository (https://github.com/Bossmanswift/GENERIC-TEAM)
 * Click on Pull Request Tab
 * Click on the "New pull request"
 * Click on "compare across forks"
 * Select your changes from your fork into the main branch
+
+# GET CHANGES FROM MAIN REPO INTO YOUR FORK
+* since you added an upstream to main repo (run: git pull upstream)
 
 # EXPLAINTION OF HOW JSON WORKS IN JAVA
 * https://www.geeksforgeeks.org/parse-json-java/
