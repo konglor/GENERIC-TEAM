@@ -20,3 +20,6 @@ ICS 372 GROUP PROJECTS
 * Click on the "New pull request"
 * Click on "compare across forks"
 * Select your changes from your fork into the main branch
+
+# EXPLAINTION OF HOW JSON WORKS IN JAVA
+* https://www.geeksforgeeks.org/parse-json-java/
