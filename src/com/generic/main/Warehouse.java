@@ -28,7 +28,12 @@ public class Warehouse {
 		return warehouseID;
 	}
 	
-	public void addShipment(Shipment shipment) {
-		shipments.add(shipment);
+	public void addShipment(String id, String freight, float weight, int date) {
+		if(freightReceipt = true) {
+			Shipment s = new Shipment(id, freight, weight, date);
+			shipments.add(s);
+		}else {
+			System.out.println("Warehouse " + warehouseID + "is not currently accepting shipments");
+		}
 	}
 }
