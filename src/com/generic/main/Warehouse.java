@@ -1,4 +1,7 @@
 package com.generic.main;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -35,5 +38,54 @@ public class Warehouse {
 		}else {
 			System.out.println("Warehouse " + warehouseID + "is not currently accepting shipments");
 		}
+	}
+	
+	@Override
+	public String toString()
+	{
+		
+		
+		String headerString  = String.format("|WAREHOUSEID: %d| FREIGHT RECEIPT STATUS: %s| SHIPMENT AVALIABLE: %d|"
+											, warehouseID, (freightReceipt) ? "ENABLED" : "ENDED", shipments.size());
+		
+		StringBuilder warehouseInfo = new StringBuilder("");
+		
+		for (int i = 0; i <= headerString.length(); i++)
+		{
+			warehouseInfo.append("-");
+		}
+		
+		warehouseInfo.append("\n" + headerString);
+		warehouseInfo.append("\n*****************************************************************************");
+		warehouseInfo.append("\n          *SHIPMENT RECEIVED*");
+		warehouseInfo.append("\n****************************************");
+		int count = 0;
+		for (Shipment shipment : shipments)
+		{
+			count++;
+			String shipmentID = shipment.getShipmentID();
+			double weight = shipment.getWeight();
+			long receiptDate = shipment.getReceiptDate();
+			
+			
+			String shipmentInfo = String.format("%d.Shipment_Id: %s\n  Weight: %.1f\n  Receipt_Date: %s",
+												count, shipmentID, weight, milliToDate(receiptDate));
+			
+			warehouseInfo.append("\n" + shipmentInfo);
+			warehouseInfo.append("\n****************************************");
+			
+		}
+		
+		return warehouseInfo.toString();
+	
+	}
+	private String milliToDate(long milliDate)
+	{
+		DateFormat simple = new SimpleDateFormat("dd MMMMM yyyy HH:mm:ss");
+		
+		Date result = new Date(milliDate);
+		
+		return simple.format(result);
+		
 	}
 }
