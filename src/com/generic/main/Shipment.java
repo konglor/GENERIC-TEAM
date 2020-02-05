@@ -4,13 +4,13 @@ public class Shipment {
 	private String shipmentID;
 	private String freight;
 	private float weight;
-	private int receiptDate; //Need to figure out the date format
+	private long receiptDate; //Need to figure out the date format
 	
-	public Shipment(String id, String f, float w, int d) {
-		shipmentID = id;
-		freight = f;
-		weight = w;
-		receiptDate = d;
+	public Shipment(String shipmentID, String freight, float weight, long receiptDate) {
+		this.shipmentID = shipmentID;
+		this.freight = freight;
+		this.weight = weight;
+		this.receiptDate = receiptDate;
 	}
 
 	public String getShipmentID() {
@@ -37,11 +37,11 @@ public class Shipment {
 		this.weight = weight;
 	}
 
-	public int getReceiptDate() {
+	public long getReceiptDate() {
 		return receiptDate;
 	}
 
-	public void setReceiptDate(int receiptDate) {
+	public void setReceiptDate(long receiptDate) {
 		this.receiptDate = receiptDate;
 	}
 	
