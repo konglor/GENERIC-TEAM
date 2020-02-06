@@ -52,7 +52,6 @@ public class WarehouseTracker {
 		return added;
 	}
 	
-	
 	/**
 	 * Adds a shipment to a warehouse, if the warehouseID
 	 * does not exist, it returns -1, if
@@ -82,8 +81,6 @@ public class WarehouseTracker {
 		}
 		
 		return logCode;
-		
-		
 	}
 	
 	/**
@@ -116,7 +113,6 @@ public class WarehouseTracker {
 		
 		return logCode;
 	 }
-	 
 	 
 	/**
 	 * Disables a warehouse receipt, if the warehouseID does not exist, it returns
