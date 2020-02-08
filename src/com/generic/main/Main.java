@@ -34,6 +34,7 @@ public class Main {
 			app.parseJson(new File("resource/example.json").getAbsolutePath());
 		} catch(IOException | ParseException e) {
 			System.out.println("System can not read the file!");
+			System.exit(0);
 		}
 		// export warehouse data to json
 		warehouseTracker.exportWarehouseToJSON(15566);
@@ -52,6 +53,8 @@ public class Main {
 		JSONObject jsonFile = (JSONObject) jsonParser.parse(reader);
 		JSONArray warehouseContents = (JSONArray) jsonFile.get("warehouse_contents");
 		warehouseContents.forEach(shipmentObject -> parseWarehouseContentsToObjects((JSONObject) shipmentObject));
+		
+		reader.close();
 	}
 
 	/**
