@@ -30,7 +30,8 @@ public class WarehouseTracker {
 	public static WarehouseTracker getInstance() {
 		if (warehouseTracker == null) {
 			synchronized(WarehouseTracker.class) {
-				warehouses = new HashMap<>();
+				warehouseTracker = new WarehouseTracker();
+				warehouseTracker.warehouses = new HashMap<>();
 			}
 		}
 		return warehouseTracker;
@@ -145,10 +146,10 @@ public class WarehouseTracker {
 	 * Prints information about a warehouse for user to see.
 	 * @param warehouseID the warehouse id number.
 	 */
-	public void printWarehouseDetails(int warehouseID) throws RuntimeException {
+	public void printWarehouseDetails(int warehouseID) {
 		Warehouse theWarehouse = warehouses.get(warehouseID);
 		if (theWarehouse == null) 
-			throw new RuntimeException("Warehouse ID: "+warehouseID+" does not exist!");
+			return; // TODO: throw exception
 		else 
 			System.out.println(theWarehouse.toString());
 	}
