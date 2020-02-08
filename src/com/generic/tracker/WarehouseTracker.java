@@ -46,25 +46,20 @@ public class WarehouseTracker {
 	 * 		   false if add wasn't.
 	 */
 	public boolean addWarehouse(Warehouse mWarehouse) {
-		// synchronized because other threads may come in and take a warehouse on line 53
-		synchronized(WarehouseTracker.class) {
-			if(warehouses.get(mWarehouse.getWarehouseID()) == null) {
-				warehouses.put(mWarehouse.getWarehouseID(), mWarehouse);
-				return true;
-			}
-			return false;
+		if(warehouses.get(mWarehouse.getWarehouseID()) == null) {
+			warehouses.put(mWarehouse.getWarehouseID(), mWarehouse);
+			return true;
 		}
+		return false;
 	}
 	
 	public boolean addShipment(int warehouseID, Shipment mShipment) {
-		synchronized(WarehouseTracker.class) {
-			Warehouse theWarehouse = warehouses.get(warehouseID);
-			if (theWarehouse != null && theWarehouse.receivingFreight()) {
-				theWarehouse.addShipment(mShipment);
-				return true;
-			}
-			return false;
+		Warehouse theWarehouse = warehouses.get(warehouseID);
+		if (theWarehouse != null && theWarehouse.receivingFreight()) {
+			theWarehouse.addShipment(mShipment);
+			return true;
 		}
+		return false;
 	}
 	
 	/**
@@ -75,14 +70,12 @@ public class WarehouseTracker {
 	 *         enabled, false if not.
 	 */
 	 public boolean enableFreight(int warehouseID) {
-		 synchronized(WarehouseTracker.class) {
-			 Warehouse theWarehouse = warehouses.get(warehouseID);
-			 if (theWarehouse != null) {
-				 theWarehouse.enableFreight();
-				 return true;
-			}
-			return false;
-		 }
+		 Warehouse theWarehouse = warehouses.get(warehouseID);
+		 if (theWarehouse != null) {
+			 theWarehouse.enableFreight();
+			 return true;
+		}
+		return false;
 	 }
 	
 	 /**
@@ -92,14 +85,12 @@ public class WarehouseTracker {
 	  *         disabled, false if not.
 	  */
 	public boolean endFreight(int warehouseID) {
-		synchronized(WarehouseTracker.class) {
-			Warehouse theWarehouse = warehouses.get(warehouseID);
-			if (theWarehouse != null) {
-				theWarehouse.disableFreight();
-				return true;
-			}
-			return false;
+		Warehouse theWarehouse = warehouses.get(warehouseID);
+		if (theWarehouse != null) {
+			theWarehouse.disableFreight();
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -107,9 +98,7 @@ public class WarehouseTracker {
 	 * @return true if empty, false if not.
 	 */
 	public boolean isEmpty() {
-		synchronized(WarehouseTracker.class) {
-			return warehouses.size() == 0;
-		}
+		return warehouses.size() == 0;
 	}
 
 	/**
@@ -118,11 +107,8 @@ public class WarehouseTracker {
 	 * 		   warehouse doesn't exist
 	 */
 	public int getWarehouseShipmentsSize(int warehouseID) {
-		synchronized(WarehouseTracker.class) {
-			Warehouse theWarehouse = warehouses.get(warehouseID);
-			return (theWarehouse != null ? theWarehouse.getShipmentSize() : -1);
-		}
-		
+		Warehouse theWarehouse = warehouses.get(warehouseID);
+		return (theWarehouse != null ? theWarehouse.getShipmentSize() : -1);
 	}
 
 	/**
@@ -132,14 +118,12 @@ public class WarehouseTracker {
 	 * @return true if warehouse exists, false if not
 	 */
 	public boolean exportWarehouseToJSON (int warehouseID) {
-		synchronized(WarehouseTracker.class) {
-			Warehouse theWarehouse = warehouses.get(warehouseID);
-			boolean exists = (theWarehouse != null);
-			if (exists) {
-				theWarehouse.exportToJSON();
-			}
-			return exists;
+		Warehouse theWarehouse = warehouses.get(warehouseID);
+		boolean exists = (theWarehouse != null);
+		if (exists) {
+			theWarehouse.exportToJSON();
 		}
+		return exists;
 	}
 	
 	/**
