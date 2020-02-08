@@ -1,9 +1,15 @@
 package com.generic.model;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * 
@@ -19,15 +25,20 @@ public class Warehouse {
 	private boolean freightReceipt; // freight receipt
 	private List<Shipment> shipments; // List of shipments
 	
+	
+	
+	// Removed argument for receipt as
+	// the freight status will always 
+	// be true when a new warehouse is constructed.
 	/**
 	 * Construct a new warehouse
 	 * @param id warehouse identification number
 	 * @param receipt freightReceipt status
 	 */
-	public Warehouse(int id, boolean receipt) {
+	public Warehouse(int id) {
 		shipments = new ArrayList<Shipment>();
 		warehouseID = id;
-		freightReceipt = receipt;
+		freightReceipt = true;
 	}
 	
 	/**
@@ -107,7 +118,7 @@ public class Warehouse {
 		if (!isEmpty()) {
 			
 			
-			String headerString  = String.format("|WAREHOUSEID: %d| FREIGHT RECEIPT STATUS: %s| SHIPMENT AVALIABLE: %d|"
+			String headerString  = String.format("| WAREHOUSEID: %d| FREIGHT RECEIPT STATUS: %s| SHIPMENT AVALIABLE: %d|"
 												, warehouseID, (freightReceipt) ? "ENABLED" : "ENDED", getShipmentSize());
 			
 			for (int i = 0; i <= headerString.length(); i++)
@@ -131,7 +142,7 @@ public class Warehouse {
 				
 				
 				String shipmentInfo = String.format("%d.Shipment_Id: %s\n  Weight: %.1f\n  Freight_Type: %s\n  Receipt_Date: %s",
-													count, shipmentID, weight, fType, milliToDate(receiptDate));
+													count, shipmentID, weight, fType.toString().toLowerCase(), milliToDate(receiptDate));
 				
 				warehouseInfo.append("\n" + shipmentInfo);
 				warehouseInfo.append("\n****************************************");
@@ -175,6 +186,68 @@ public class Warehouse {
 	{
 		return (shipments.size() == 0);
 	}
+	
+	/**
+	 * Exports a warehouse object to a JSON 
+	 * file.
+	 * 
+	 * 
+	 * A NICE THING TO ADD WILL BE TO ALLOW
+	 * USER SPECIFY A DESTINATION PATH FOR FILE.
+	 * 
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	public void exportToJSON()
+	{
+		JSONArray warehouseContents = new JSONArray();
+		
+		
+		
+		for (Shipment shipment : shipments) {
+			JSONObject shipmentContents = new JSONObject();
+			
+			StringBuilder shipmentIDValue = new StringBuilder('"');
+			shipmentIDValue.append('"');
+			shipmentIDValue.append(shipment.getShipmentID());
+			shipmentIDValue.append('"');
+			
+			// 
+			StringBuilder freightTypeValue = new StringBuilder('"');
+			freightTypeValue.append('"');
+			freightTypeValue.append(shipment.getFreight().toString().toLowerCase());
+			freightTypeValue.append('"');
+			
+			shipmentContents.put("shipment_id", shipmentIDValue);
+			shipmentContents.put("shipment_method", freightTypeValue);
+			shipmentContents.put("weight", shipment.getWeight());
+			shipmentContents.put("receipt_date", shipment.getReceiptDate());
+	
+			warehouseContents.add(shipmentContents);
+
+		}
+		
+		
+		JSONObject warehouseInfo = new JSONObject();
+		warehouseInfo.put("Warehouse_" + warehouseID, warehouseContents);
+		
+		//Write JSON file
+        try (FileWriter file = new FileWriter("warehouse_"+ warehouseID + ".json")) {
+ 
+            file.flush();
+     
+        	PrintWriter printWriter = new PrintWriter(file);
+
+        	
+            printWriter.println(warehouseInfo.toJSONString());
+ 
+        } catch (IOException e) {
+        	System.out.println(e.getMessage());
+        }
+	}
+	
+	
+	 
 	
 	/**
 	 * Converts milliseconds to a date 
