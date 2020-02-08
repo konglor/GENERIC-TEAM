@@ -14,34 +14,36 @@ import com.generic.model.Warehouse;
  * adding shipment, printing warehouse details,
  * enabling and disabled the freight receipt of a warehouse.
  * 
- * 
- * THE MAJOR REASON I MAKE THE METHODS RETURN SOMETHING IS FOR TESTING
- * THE ONLY METHOD THAT SHOLD BE ALLOWED TO HAVE 
- * A VOID RETURN TYPE IN THIS CLASS IS printWarehouseDetails() and addWarehouse
- * 
  * @author Seyi Ola
  *
  */
 public class WarehouseTracker {
 	
+	
+	private static WarehouseTracker warehouseTracker = new WarehouseTracker();
 	private Map<Integer, Warehouse> warehouses; // Stores a collection of warehouses
 											    // mapped by their id 
 	
-	public WarehouseTracker()
+	private WarehouseTracker()
 	{
 		// Store the warehouse
 		warehouses = new HashMap<>();	
 	}
 	
+	public static WarehouseTracker getInstance()
+	{
+		return warehouseTracker;
+	}
+	
 	/**
-	 * /**
+	 * 
 	 * Adds a new warehouse to the warehouse collection.
 	 * If the warehouse already exists, we return false.
-	 * @param mWarehouse warehouse to add.
+	 * @param  mWarehouse warehouse to add.
 	 * @return true if add was successful,
 	 * 		   false if add wasn't.
 	 */
-	public boolean addWarehouse(Warehouse mWarehouse)
+	public boolean addWarehouse(Warehouse mWarehouse) 
 	{
 		boolean added = false;
 		if(warehouses.get(mWarehouse.getWarehouseID()) == null)
@@ -53,95 +55,52 @@ public class WarehouseTracker {
 	}
 	
 	
-	/**
-	 * Adds a shipment to a warehouse, if the warehouseID
-	 * does not exist, it returns -1, if
-	 * the shipment could not be added because it's 
-	 * freight receipt has ended, it returns 0,
-	 * and if the shipment was successfully added, it 
-	 * returns 1.
-	 * @param warehouseID the warehouseID
-	 * @param shipment the shipment to add to this warehouse
-	 * @return -1 if ID does not exist
-	 * 		  , 0 if freight receipt is disabled,
-	 * 		  , 1 if successfully added.
-	 * 			
-	 */
-	public int addShipment(int warehouseID, Shipment mShipment)
+	public boolean addShipment(int warehouseID, Shipment mShipment)
 	{
 		Warehouse theWarehouse = warehouses.get(warehouseID);
 		
-		int logCode = 0;
+		boolean add = (theWarehouse != null && theWarehouse.receivingFreight());
+		if (add) {theWarehouse.addShipment(mShipment);}
 		
-		if (theWarehouse == null)
-		{
-			logCode = -1;
-		}else if (theWarehouse.addShipment(mShipment))
-		{
-			logCode = 1;
-		}
-		
-		return logCode;
-		
-		
+		return add;
 	}
 	
+	
 	/**
-	 * Enables a warehouse receipt freight, if the warehouseID
-	 * does not exist, it returns -1, if
-	 * the freight receipt could not be enabled because it's 
-	 * freight receipt is enabled already, it returns 0,
-	 * and if the warehouse freight is already enabled, it 
-	 * returns 1.
-	 * @param warehouseID the warehouse ID
-	 * @return log number based on result(-1:non-existent warehouse,
-	 * 									   0: already enabled,
-	 * 									   1: successfully added).
+	 * Enables a freight receipt in 
+	 * a Warehouse.
+	 * @param warehouseID warehouse id
+	 * @return true if freight was successfully
+	 *         enabled, false if not.
 	 */
 	
-	 public int enableFreight(int warehouseID)
+	 public boolean enableFreight(int warehouseID)
 	 {
-		Warehouse theWarehouse = warehouses.get(warehouseID);
-		
-		int logCode = 0;
-		
-		if (theWarehouse == null) 
-		{
-			logCode = -1;
-		}else if (!theWarehouse.receivingFreight()) 
-		{
-			theWarehouse.enableFreight();
-			logCode = 1;
-		}
-		
-		return logCode;
+		 
+		 Warehouse theWarehouse = warehouses.get(warehouseID);
+
+		 boolean enabled = (theWarehouse != null);
+		 
+		 if (enabled) {theWarehouse.enableFreight();}
+			
+		 return enabled;
 	 }
 	 
-	 
-	/**
-	 * Disables a warehouse receipt, if the warehouseID does not exist, it returns
-	 * -1, if the freight receipt could not be disabled because it's freight receipt
-	 * is disabled already, it returns 0, and if the warehouse freight is already
-	 * disabled, it returns 1.
-	 * @param warehouseID the warehouse ID
-	 * @return log number based on result(-1:non-existent warehouse,
-	 * 									   0: already disabled,
-	 * 									   1: successfully added).
-	 */
 
-	public int endFreight(int warehouseID) {
+	 /**
+	  * Disables freight receipt in a warehouse
+	  * @param warehouseID warehouse id
+	  * @return true if freight was successfully
+	  *         disabled, false if not.
+	  */
+	
+	public boolean endFreight(int warehouseID) {
 		Warehouse theWarehouse = warehouses.get(warehouseID);
 
-		int logCode = 0;
-
-		if (theWarehouse == null) {
-			logCode = -1;
-		} else if (theWarehouse.receivingFreight()) {
-			theWarehouse.disableFreight();
-			logCode = 1;
-		}
-
-		return logCode;
+		boolean disabled = (theWarehouse != null);
+		if (disabled) {theWarehouse.disableFreight();}
+		
+		return disabled;
 	}
 	
 	/**
@@ -153,9 +112,37 @@ public class WarehouseTracker {
 		return warehouses.size() == 0;
 	}
 	
-	public Warehouse getWarehouse(int warehouseID)
+	
+	/**
+	 * Getter for shipments size for a specified warehouse
+	 * @return the size of the warehouse, -1 if
+	 * 		   warehouse doesn't exist
+	 */
+	public int getWarehouseShipmentsSize(int warehouseID)
 	{
-		return warehouses.get(warehouseID);
+		Warehouse theWarehouse = warehouses.get(warehouseID);
+		return (theWarehouse != null ? theWarehouse.getShipmentSize() : -1);
+		
+	}
+	
+	
+	
+	/**
+	 * Exports a warehouse object to JSON file
+	 * @param warehouseID warehouse id
+	 * @param destPath path to write file to
+	 * @return true if warehouse exists, false if not
+	 */
+	public boolean exportWarehouseToJSON (int warehouseID) // What if the warehouse is empty?
+	{
+		
+		Warehouse theWarehouse = warehouses.get(warehouseID);
+		
+		boolean exists = (theWarehouse != null);
+		
+		if (exists){ theWarehouse.exportToJSON(); }
+		
+		return exists;
 	}
 	
 	/**
@@ -175,6 +162,8 @@ public class WarehouseTracker {
 		}
 
 	}
+	
+	
 	
 
 }

@@ -1,3 +1,8 @@
 package com.generic.model;
 
-public enum FreightType {air, truck, ship, rail}
+/**
+ * Enum for FreightType
+ * @author Seyi Ola
+ */
+
+public enum FreightType {AIR, TRUCK, SHIP, RAIL}
