@@ -119,29 +119,19 @@ public class Main {
 	 * @param shipmentObject shipment object in json
 	 */
 	private void parseWarehouseContentsToObjects(JSONObject shipmentObject) {
-
 		String warehouseString = (String)shipmentObject.get("warehouse_id");
 		int warehouseID = Integer.parseInt(warehouseString);
-		
 		// create warehouse
 		Warehouse warehouse = new Warehouse(warehouseID);
-
-		String shipmentID = (String) shipmentObject.get("shipment_id");
-		FreightType freight = FreightType.valueOf((String)shipmentObject.get("shipment_method").toString().toUpperCase());
-		Number weight = (Number) shipmentObject.get("weight");
-		Number receiptDate = (Number) shipmentObject.get("receipt_date");
-		
 		// build a shipment
 		Shipment shipment = new Shipment.Builder()
-				.id(shipmentID)
-				.type(freight)
-				.weight(weight.doubleValue())
-				.date(receiptDate.longValue())
+				.id((String) shipmentObject.get("shipment_id"))
+				.type(FreightType.valueOf((String)shipmentObject.get("shipment_method").toString().toUpperCase()))
+				.weight(((Number) shipmentObject.get("weight")).doubleValue())
+				.date(((Number) (Number) shipmentObject.get("receipt_date")).longValue())
 				.build();
-
 		// add the warehouse
 		warehouseTracker.addWarehouse(warehouse);
-				
 		// add the shipment to the warehouse
 		warehouseTracker.addShipment(warehouseID, shipment);
 	}

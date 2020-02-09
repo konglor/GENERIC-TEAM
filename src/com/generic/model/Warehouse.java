@@ -20,8 +20,8 @@ import org.json.simple.JSONObject;
 
 public class Warehouse {
 	
-	private static String WAREHOUSE_FORMAT_STRING = "| WAREHOUSEID: %d| FREIGHT RECEIPT STATUS: %s| SHIPMENT AVALIABLE: %d|";
-	private static String WAREHOUSE_DETAIl_FORMAT_STRING = "%d.Shipment_Id: %s\n  Weight: %.1f\n  Freight_Type: %s\n  Receipt_Date: %s";
+	private static final String WAREHOUSE_FORMAT_STRING = "| WAREHOUSEID: %d| FREIGHT RECEIPT STATUS: %s| SHIPMENT AVALIABLE: %d|";
+	private static final String WAREHOUSE_DETAIl_FORMAT_STRING = "%d.Shipment_Id: %s\n  Weight: %.1f\n  Freight_Type: %s\n  Receipt_Date: %s";
 	
 	private int warehouseID; // warehouse ID
 	private boolean freightReceipt; // freight receipt
@@ -93,18 +93,15 @@ public class Warehouse {
 	
 	@Override
 	public String toString() {
-		StringBuilder warehouseInfo = new StringBuilder();
-
+		String headerString = String.format(WAREHOUSE_FORMAT_STRING, warehouseID, (freightReceipt) ? "ENABLED" : "ENDED", getShipmentSize());
+		String headerFormat = new String(new char[headerString.length()]).replace("\0", "-");
+		StringBuilder warehouseInfo = new StringBuilder()
+				.append(headerFormat).append("\n")
+				.append(headerString).append("\n")
+				.append(headerFormat).append("\n")
+				.append("          *SHIPMENT RECEIVED*").append("\n")
+				.append("****************************************").append("\n");
 		if (!isEmpty()) {
-			String headerString = String.format(WAREHOUSE_FORMAT_STRING, warehouseID, (freightReceipt) ? "ENABLED" : "ENDED", getShipmentSize());
-			for (int i = 0; i <= headerString.length(); i++) {
-				warehouseInfo.append("-");
-			}
-			
-			warehouseInfo.append("\n" + headerString);
-			warehouseInfo.append("\n*****************************************************************************");
-			warehouseInfo.append("\n          *SHIPMENT RECEIVED*");
-			warehouseInfo.append("\n****************************************");
 			int count = 0;
 			for (Shipment shipment : shipments)
 			{
@@ -115,21 +112,13 @@ public class Warehouse {
 				FreightType fType = shipment.getFreight();
 
 				String shipmentInfo = String.format(WAREHOUSE_DETAIl_FORMAT_STRING, count, shipmentID, weight, fType.toString().toLowerCase(), milliToDate(receiptDate));
-				warehouseInfo.append("\n" + shipmentInfo);
+				warehouseInfo.append(shipmentInfo).append("\n");
 			}
 			
 		} else {
-			String headerString = String.format(WAREHOUSE_FORMAT_STRING, warehouseID, (freightReceipt) ? "ENABLED" : "ENDED", shipments.size());
-			for (int i = 0; i <= headerString.length(); i++) {
-				warehouseInfo.append("-");
-			}
-			warehouseInfo.append("\n" + headerString);
-			warehouseInfo.append("\n*****************************************************************************");
-			warehouseInfo.append("\n          *SHIPMENT RECEIVED*");
-			warehouseInfo.append("\n****************************************");
-			warehouseInfo.append("\n        *NO SHIPMENTS RECEIVED YET*");
-			warehouseInfo.append("\n\n****************************************");
+			warehouseInfo.append("        *NO SHIPMENTS RECEIVED YET*").append("\n");
 		}
+		warehouseInfo.append("****************************************");
 		return warehouseInfo.toString();
 	}
 	

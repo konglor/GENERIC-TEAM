@@ -123,11 +123,11 @@ public final class WarehouseTracker {
 	 */
 	public boolean exportWarehouseToJSON (int warehouseID) {
 		Warehouse theWarehouse = warehouses.get(warehouseID);
-		boolean exists = (theWarehouse != null);
-		if (exists) {
+		if (theWarehouse != null) {
 			theWarehouse.exportToJSON();
+			return true;
 		}
-		return exists;
+		return false;
 	}
 	
 	/**
@@ -139,8 +139,8 @@ public final class WarehouseTracker {
 		if (theWarehouse == null) {
 			System.out.println("Warehouse cannot be found!");
 			return; // TODO: throw exception
-		} else 
-			System.out.println(theWarehouse.toString());
+		}
+		System.out.println(theWarehouse.toString());
 	}
 	
 	public void printAll() {
