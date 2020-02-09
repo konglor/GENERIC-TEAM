@@ -3,6 +3,7 @@ package com.generic.main;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -16,6 +17,10 @@ import com.generic.tracker.WarehouseTracker;
 
 /**
  * Entry Point
+ * 
+ * To import run the command:
+ * import example.json
+ * 
  * @author GENERIC TEAM
  *
  */
@@ -25,19 +30,50 @@ public class Main {
 	
 	public Main() {
 		warehouseTracker = WarehouseTracker.getInstance();
+		
+		System.out.println("Available Commands:");
+		System.out.println("import <file>");
+		System.out.println("export <file>");
+		System.out.println("print");
+		System.out.println("exit");
 	}
 
 	public static void main(String[] args) {
 		Main app = new Main();
-		try {
-			// parse the json file
-			app.parseJson(new File("resource/example.json").getAbsolutePath());
-		} catch(IOException | ParseException e) {
-			System.out.println("System can not read the file!");
-			System.exit(0);
+		Scanner in = new Scanner(System.in);
+		
+		loop:
+		while(true) {
+			System.out.print("> ");
+			if (!in.hasNextLine())
+				break;
+				
+			String[] command = in.nextLine().split(" ");
+			switch(command[0].toLowerCase()) {
+				case "import":
+					String file = command[1];
+					try {
+						System.out.println("Importing "+file+"...");
+						app.parseJson(new File("resource/"+file).getAbsolutePath());
+					} catch(IOException | ParseException e) {
+						System.out.println("System can not read the file!");
+						System.exit(0);
+					}
+					break;
+				case "export":
+					warehouseTracker.exportWarehouseToJSON(15566);
+					break;
+				case "print":
+					warehouseTracker.printAll();
+					break;
+				case "exit":
+					break loop;
+				default:
+					System.out.println("** Invalid Command!");
+					continue;
+			}
 		}
-		// export warehouse data to json
-		warehouseTracker.exportWarehouseToJSON(15566);
+		System.out.println("Goodbye!");
 	}
 
 	/**

@@ -141,4 +141,8 @@ public class WarehouseTracker {
 		else 
 			System.out.println(theWarehouse.toString());
 	}
+	
+	public void printAll() {
+		warehouses.forEach((k, v) -> printWarehouseDetails(k));
+	}
 }
