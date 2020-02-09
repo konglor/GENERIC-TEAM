@@ -31,14 +31,15 @@ public class Main {
 	public Main() {
 		warehouseTracker = WarehouseTracker.getInstance();
 		
+		// TODO: use map for commands <command, function>
 		System.out.println("Available Commands:");
 		System.out.println("import <file>");
 		System.out.println("export <file>");
 		System.out.println("warehouse add -- TODO");
 		System.out.println("warehouse delete -- TODO");
 		System.out.println("warehouse enable -- TODO");
-		System.out.println("shipment add");
-		System.out.println("shipment assign <warehouse>");
+		System.out.println("shipment add -- TODO");
+		System.out.println("shipment assign <warehouse> -- TODO");
 		System.out.println("print");
 		System.out.println("exit");
 	}
