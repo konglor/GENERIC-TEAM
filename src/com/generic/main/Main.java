@@ -56,6 +56,7 @@ public class Main {
 					try {
 						System.out.println("Importing "+file+"...");
 						app.parseJson(new File("resource/"+file).getAbsolutePath());
+						System.out.println("Importing complete!");
 					} catch (IOException | ParseException e) {
 						System.out.println("System can not read the file!");
 					}
@@ -100,17 +101,17 @@ public class Main {
 	 * @param shipmentObject shipment object in json
 	 */
 	private void parseWarehouseContentsToObjects(JSONObject shipmentObject) {
-		// get the warehouse ID
+
 		String warehouseString = (String)shipmentObject.get("warehouse_id");
 		int warehouseID = Integer.parseInt(warehouseString);
+		
+		// create warehouse
+		Warehouse warehouse = new Warehouse(warehouseID);
 
 		String shipmentID = (String) shipmentObject.get("shipment_id");
 		FreightType freight = FreightType.valueOf((String)shipmentObject.get("shipment_method").toString().toUpperCase());
 		Number weight = (Number) shipmentObject.get("weight");
 		Number receiptDate = (Number) shipmentObject.get("receipt_date");
-
-		// add the warehouse
-		warehouseTracker.addWarehouse(new Warehouse(warehouseID));
 		
 		// build a shipment
 		Shipment shipment = new Shipment.Builder()
@@ -119,11 +120,11 @@ public class Main {
 				.weight(weight.doubleValue())
 				.date(receiptDate.longValue())
 				.build();
+
+		// add the warehouse
+		warehouseTracker.addWarehouse(warehouse);
 				
 		// add the shipment to the warehouse
 		warehouseTracker.addShipment(warehouseID, shipment);
-		
-		// print the contents of the warehouse
-		warehouseTracker.printWarehouseDetails(warehouseID);		
 	}
 }

@@ -18,11 +18,11 @@ import com.generic.model.Warehouse;
  * @author GENERIC TEAM
  *
  */
-public class WarehouseTracker {
+public final class WarehouseTracker {
 	private static WarehouseTracker warehouseTracker;
 	
 	// Stores a collection of warehouses mapped by their id 
-	private static Map<Integer, Warehouse> warehouses;
+	private Map<Integer, Warehouse> warehouses;
 
 	// private constructor
 	private WarehouseTracker() {}
@@ -136,9 +136,10 @@ public class WarehouseTracker {
 	 */
 	public void printWarehouseDetails(int warehouseID) {
 		Warehouse theWarehouse = warehouses.get(warehouseID);
-		if (theWarehouse == null) 
+		if (theWarehouse == null) {
+			System.out.println("Warehouse cannot be found!");
 			return; // TODO: throw exception
-		else 
+		} else 
 			System.out.println(theWarehouse.toString());
 	}
 	

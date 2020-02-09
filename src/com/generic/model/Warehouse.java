@@ -33,9 +33,9 @@ public class Warehouse {
 	 * @param receipt freightReceipt status
 	 */
 	public Warehouse(int warehouseID) {
-		shipments = new ArrayList<Shipment>();
-		warehouseID = warehouseID;
-		freightReceipt = true;
+		this.shipments = new ArrayList<Shipment>();
+		this.warehouseID = warehouseID;
+		this.freightReceipt = true;
 	}
 	
 	/**

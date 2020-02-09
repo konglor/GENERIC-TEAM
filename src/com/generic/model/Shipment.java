@@ -6,6 +6,7 @@ package com.generic.model;
  */
 
 public final class Shipment {
+
 	private String shipmentID; //shipment identification number
 	private FreightType freight; //freight type
 	private double weight; // shipment weight
@@ -39,6 +40,13 @@ public final class Shipment {
 
 	public long getReceiptDate() {
 		return receiptDate;
+	}
+	
+	public String toString() {
+		return  "shipmentID = "+shipmentID+"\n" +
+				"freight = "+freight+"\n" +
+				"weight = "+weight+"\n" +
+				"receiptDate = "+receiptDate+"\n";
 	}
 
 	public static final class Builder {
