@@ -34,6 +34,11 @@ public class Main {
 		System.out.println("Available Commands:");
 		System.out.println("import <file>");
 		System.out.println("export <file>");
+		System.out.println("warehouse add -- TODO");
+		System.out.println("warehouse delete -- TODO");
+		System.out.println("warehouse enable -- TODO");
+		System.out.println("shipment add");
+		System.out.println("shipment assign <warehouse>");
 		System.out.println("print");
 		System.out.println("exit");
 	}
@@ -64,6 +69,18 @@ public class Main {
 				case "export":
 					// TODO: specify the file name
 					warehouseTracker.exportWarehouseToJSON(15566);
+					break;
+				case "shipment":
+					switch(arg[1]) {
+						case "add":
+							// calls a to take input from user and "builds" a new shipment
+							System.out.println("Working in progress...");
+							break;
+						case "assign":
+							// parse arg[2] into int (the warehouse ID)
+							System.out.println("Working in progress...");
+							break;
+					}
 					break;
 				case "print":
 					warehouseTracker.printAll();
