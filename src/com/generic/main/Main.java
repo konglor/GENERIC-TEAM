@@ -55,7 +55,7 @@ public class Main {
 					try {
 						System.out.println("Importing "+file+"...");
 						app.parseJson(new File("resource/"+file).getAbsolutePath());
-					} catch(IOException | ParseException e) {
+					} catch (IOException | ParseException e) {
 						System.out.println("System can not read the file!");
 						System.exit(0);
 					}
