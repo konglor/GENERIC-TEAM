@@ -48,16 +48,16 @@ public class Main {
 			if (!in.hasNextLine())
 				break;
 				
-			String[] command = in.nextLine().split(" ");
-			switch(command[0].toLowerCase()) {
+			String[] arg = in.nextLine().split(" ");
+			String command = arg[0];
+			switch(command.toLowerCase()) {
 				case "import":
-					String file = command[1];
+					String file = arg[1];
 					try {
 						System.out.println("Importing "+file+"...");
 						app.parseJson(new File("resource/"+file).getAbsolutePath());
 					} catch (IOException | ParseException e) {
 						System.out.println("System can not read the file!");
-						System.exit(0);
 					}
 					break;
 				case "export":
