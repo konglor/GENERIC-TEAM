@@ -20,8 +20,7 @@ import org.json.simple.JSONObject;
 
 public class Warehouse {
 	
-	private static final String WAREHOUSE_FORMAT_STRING = "| WAREHOUSEID: %d| FREIGHT RECEIPT STATUS: %s| SHIPMENT AVALIABLE: %d|";
-	private static final String WAREHOUSE_DETAIl_FORMAT_STRING = "%d.Shipment_Id: %s\n  Weight: %.1f\n  Freight_Type: %s\n  Receipt_Date: %s";
+	private static final String WAREHOUSE_DETAIL_FORMAT_STRING = "| WAREHOUSEID: %d| FREIGHT RECEIPT STATUS: %s| SHIPMENT AVALIABLE: %d|";
 	
 	private int warehouseID; // warehouse ID
 	private boolean freightReceipt; // freight receipt
@@ -93,7 +92,7 @@ public class Warehouse {
 	
 	@Override
 	public String toString() {
-		String headerString = String.format(WAREHOUSE_FORMAT_STRING, warehouseID, (freightReceipt) ? "ENABLED" : "ENDED", getShipmentSize());
+		String headerString = String.format(WAREHOUSE_DETAIL_FORMAT_STRING, warehouseID, (freightReceipt) ? "ENABLED" : "ENDED", getShipmentSize());
 		String headerFormat = new String(new char[headerString.length()]).replace("\0", "-");
 		StringBuilder warehouseInfo = new StringBuilder()
 				.append(headerFormat).append("\n")
@@ -102,19 +101,11 @@ public class Warehouse {
 				.append("          *SHIPMENT RECEIVED*").append("\n")
 				.append("****************************************").append("\n");
 		if (!isEmpty()) {
-			int count = 0;
-			for (Shipment shipment : shipments)
-			{
-				count++;
-				String shipmentID = shipment.getShipmentID();
-				double weight = shipment.getWeight();
-				long receiptDate = shipment.getReceiptDate();
-				FreightType fType = shipment.getFreight();
-
-				String shipmentInfo = String.format(WAREHOUSE_DETAIl_FORMAT_STRING, count, shipmentID, weight, fType.toString().toLowerCase(), milliToDate(receiptDate));
-				warehouseInfo.append(shipmentInfo).append("\n");
+			int count = 1;
+			for (Shipment shipment : shipments) {
+				String shipmentInfo = shipment.toString();
+				warehouseInfo.append(count++).append(".").append(shipmentInfo).append("\n");
 			}
-			
 		} else {
 			warehouseInfo.append("        *NO SHIPMENTS RECEIVED YET*").append("\n");
 		}
@@ -178,16 +169,5 @@ public class Warehouse {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-	}
-
-	/**
-	 * Converts milliseconds to a date 
-	 * @param milliDate date in milliseconds
-	 * @return date in simple format
-	 */
-	private String milliToDate(long milliDate) {
-		DateFormat simple = new SimpleDateFormat("dd MMMMM yyyy HH:mm:ss");
-		Date result = new Date(milliDate);
-		return simple.format(result);
 	}
 }
