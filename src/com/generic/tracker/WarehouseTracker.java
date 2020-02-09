@@ -62,6 +62,10 @@ public class WarehouseTracker {
 		return false;
 	}
 	
+	public boolean addShipment(Warehouse theWarehouse, Shipment mShipment) {
+		return addShipment(theWarehouse.getWarehouseID(), mShipment);
+	}
+	
 	/**
 	 * Enables a freight receipt in 
 	 * a Warehouse.
