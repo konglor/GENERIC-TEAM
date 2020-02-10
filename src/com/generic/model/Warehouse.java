@@ -1,4 +1,5 @@
 package com.generic.model;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -133,38 +134,28 @@ public class Warehouse {
 	 */
 	@SuppressWarnings("unchecked")
 	public void exportToJSON() {
+		String filePath = "output/warehouse_"+ warehouseID + ".json";
+		File file = new File(filePath);
+
+		JSONObject warehouseInfo = new JSONObject();
 		JSONArray warehouseContents = new JSONArray();
 		JSONObject shipmentContents;
 
 		for (Shipment shipment : shipments) {
-			shipmentContents = new JSONObject();
-			
-			String shipmentIDValue = new StringBuilder('"')
-				.append('"')
-				.append(shipment.getShipmentID())
-				.append('"')
-				.toString();
-
-			String freightTypeValue = new StringBuilder('"')
-				.append('"')
-				.append(shipment.getFreight().toString().toLowerCase())
-				.append('"')
-				.toString();
-			
-			shipmentContents.put("shipment_id", shipmentIDValue);
-			shipmentContents.put("shipment_method", freightTypeValue);
-			shipmentContents.put("weight", shipment.getWeight());
-			shipmentContents.put("receipt_date", shipment.getReceiptDate());
-	
+			shipmentContents = shipment.toJSON();
 			warehouseContents.add(shipmentContents);
 		}
-		JSONObject warehouseInfo = new JSONObject();
 		warehouseInfo.put("Warehouse_" + warehouseID, warehouseContents);
 		
+		// Check and create directory
+		if (!file.getParentFile().exists())
+			file.getParentFile().mkdirs();
+		
+		
 		//Write JSON file
-		try (FileWriter file = new FileWriter("warehouse_"+ warehouseID + ".json")) {
-			file.flush();
-			PrintWriter printWriter = new PrintWriter(file);
+		try (FileWriter fw = new FileWriter(filePath)) {
+			fw.flush();
+			PrintWriter printWriter = new PrintWriter(fw);
 			printWriter.println(warehouseInfo.toJSONString());
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
