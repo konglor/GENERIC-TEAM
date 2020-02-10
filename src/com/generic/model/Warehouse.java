@@ -23,7 +23,7 @@ public class Warehouse {
 	private static final String WAREHOUSE_DETAIL_FORMAT_STRING = "| WAREHOUSEID: %d| FREIGHT RECEIPT STATUS: %s| SHIPMENT AVALIABLE: %d|";
 	
 	private int warehouseID; // warehouse ID
-	private boolean freightReceipt; // freight receipt
+	private boolean freightReceiptEnabled; // freight receipt
 	private List<Shipment> shipments; // List of shipments
 
 	/**
@@ -34,21 +34,21 @@ public class Warehouse {
 	public Warehouse(int warehouseID) {
 		this.shipments = new ArrayList<Shipment>();
 		this.warehouseID = warehouseID;
-		this.freightReceipt = true;
+		this.freightReceiptEnabled = true;
 	}
 	
 	/**
 	 * Enables freight receipt
 	 */
 	public void enableFreight() {
-		freightReceipt = true;
+		freightReceiptEnabled = true;
 	}
 	
 	/**
 	 * Disables freight receipt
 	 */
 	public void disableFreight() {
-		freightReceipt = false;
+		freightReceiptEnabled = false;
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class Warehouse {
 	 * @return freightReceipt
 	 */
 	public boolean receivingFreight() {
-		return freightReceipt;
+		return freightReceiptEnabled;
 	}
 	
 	/**
@@ -74,7 +74,7 @@ public class Warehouse {
 	 * @return true if add successful, false if not.
 	 */
 	public boolean addShipment(Shipment mShipment) {
-		if (freightReceipt) {
+		if (freightReceiptEnabled) {
 			shipments.add(mShipment);
 			return true;
 		}
@@ -92,7 +92,7 @@ public class Warehouse {
 	
 	@Override
 	public String toString() {
-		String headerString = String.format(WAREHOUSE_DETAIL_FORMAT_STRING, warehouseID, (freightReceipt) ? "ENABLED" : "ENDED", getShipmentSize());
+		String headerString = String.format(WAREHOUSE_DETAIL_FORMAT_STRING, warehouseID, (freightReceiptEnabled) ? "ENABLED" : "ENDED", getShipmentSize());
 		String headerFormat = new String(new char[headerString.length()]).replace("\0", "-");
 		StringBuilder warehouseInfo = new StringBuilder()
 				.append(headerFormat).append("\n")
