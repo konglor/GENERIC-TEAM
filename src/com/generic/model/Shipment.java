@@ -3,7 +3,6 @@ package com.generic.model;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import org.json.simple.JSONObject;
 
 /**

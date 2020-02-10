@@ -146,11 +146,9 @@ public class Warehouse {
 		// Check and create directory
 		if (!file.getParentFile().exists())
 			file.getParentFile().mkdirs();
-		
-		
+
 		//Write JSON file
 		try (FileWriter fw = new FileWriter(filePath)) {
-			fw.flush();
 			PrintWriter printWriter = new PrintWriter(fw);
 			printWriter.println(warehouseInfo.toJSONString());
 		} catch (IOException e) {
