@@ -1,4 +1,5 @@
 package com.generic.model;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,11 +21,10 @@ import org.json.simple.JSONObject;
 
 public class Warehouse {
 	
-	private static String WAREHOUSE_FORMAT_STRING = "| WAREHOUSEID: %d| FREIGHT RECEIPT STATUS: %s| SHIPMENT AVALIABLE: %d|";
-	private static String WAREHOUSE_DETAIl_FORMAT_STRING = "%d.Shipment_Id: %s\n  Weight: %.1f\n  Freight_Type: %s\n  Receipt_Date: %s";
+	private static final String WAREHOUSE_DETAIL_FORMAT_STRING = "| WAREHOUSEID: %d| FREIGHT RECEIPT STATUS: %s| SHIPMENT AVALIABLE: %d|";
 	
 	private int warehouseID; // warehouse ID
-	private boolean freightReceipt; // freight receipt
+	private boolean freightReceiptEnabled; // freight receipt
 	private List<Shipment> shipments; // List of shipments
 
 	/**
@@ -35,21 +35,21 @@ public class Warehouse {
 	public Warehouse(int warehouseID) {
 		this.shipments = new ArrayList<Shipment>();
 		this.warehouseID = warehouseID;
-		this.freightReceipt = true;
+		this.freightReceiptEnabled = true;
 	}
 	
 	/**
 	 * Enables freight receipt
 	 */
 	public void enableFreight() {
-		freightReceipt = true;
+		freightReceiptEnabled = true;
 	}
 	
 	/**
 	 * Disables freight receipt
 	 */
 	public void disableFreight() {
-		freightReceipt = false;
+		freightReceiptEnabled = false;
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class Warehouse {
 	 * @return freightReceipt
 	 */
 	public boolean receivingFreight() {
-		return freightReceipt;
+		return freightReceiptEnabled;
 	}
 	
 	/**
@@ -75,7 +75,7 @@ public class Warehouse {
 	 * @return true if add successful, false if not.
 	 */
 	public boolean addShipment(Shipment mShipment) {
-		if (freightReceipt) {
+		if (freightReceiptEnabled) {
 			shipments.add(mShipment);
 			return true;
 		}
@@ -93,43 +93,24 @@ public class Warehouse {
 	
 	@Override
 	public String toString() {
-		StringBuilder warehouseInfo = new StringBuilder();
-
+		String headerString = String.format(WAREHOUSE_DETAIL_FORMAT_STRING, warehouseID, (freightReceiptEnabled) ? "ENABLED" : "ENDED", getShipmentSize());
+		String headerFormat = new String(new char[headerString.length()]).replace("\0", "-");
+		StringBuilder warehouseInfo = new StringBuilder()
+				.append(headerFormat).append("\n")
+				.append(headerString).append("\n")
+				.append(headerFormat).append("\n")
+				.append("          *SHIPMENT RECEIVED*").append("\n")
+				.append("****************************************").append("\n");
 		if (!isEmpty()) {
-			String headerString = String.format(WAREHOUSE_FORMAT_STRING, warehouseID, (freightReceipt) ? "ENABLED" : "ENDED", getShipmentSize());
-			for (int i = 0; i <= headerString.length(); i++) {
-				warehouseInfo.append("-");
+			int count = 1;
+			for (Shipment shipment : shipments) {
+				String shipmentInfo = shipment.toString();
+				warehouseInfo.append(count++).append(".").append(shipmentInfo).append("\n");
 			}
-			
-			warehouseInfo.append("\n" + headerString);
-			warehouseInfo.append("\n*****************************************************************************");
-			warehouseInfo.append("\n          *SHIPMENT RECEIVED*");
-			warehouseInfo.append("\n****************************************");
-			int count = 0;
-			for (Shipment shipment : shipments)
-			{
-				count++;
-				String shipmentID = shipment.getShipmentID();
-				double weight = shipment.getWeight();
-				long receiptDate = shipment.getReceiptDate();
-				FreightType fType = shipment.getFreight();
-
-				String shipmentInfo = String.format(WAREHOUSE_DETAIl_FORMAT_STRING, count, shipmentID, weight, fType.toString().toLowerCase(), milliToDate(receiptDate));
-				warehouseInfo.append("\n" + shipmentInfo);
-			}
-			
 		} else {
-			String headerString = String.format(WAREHOUSE_FORMAT_STRING, warehouseID, (freightReceipt) ? "ENABLED" : "ENDED", shipments.size());
-			for (int i = 0; i <= headerString.length(); i++) {
-				warehouseInfo.append("-");
-			}
-			warehouseInfo.append("\n" + headerString);
-			warehouseInfo.append("\n*****************************************************************************");
-			warehouseInfo.append("\n          *SHIPMENT RECEIVED*");
-			warehouseInfo.append("\n****************************************");
-			warehouseInfo.append("\n        *NO SHIPMENTS RECEIVED YET*");
-			warehouseInfo.append("\n\n****************************************");
+			warehouseInfo.append("        *NO SHIPMENTS RECEIVED YET*").append("\n");
 		}
+		warehouseInfo.append("****************************************");
 		return warehouseInfo.toString();
 	}
 	
@@ -153,52 +134,31 @@ public class Warehouse {
 	 */
 	@SuppressWarnings("unchecked")
 	public void exportToJSON() {
+		String filePath = "output/warehouse_"+ warehouseID + ".json";
+		File file = new File(filePath);
+
+		JSONObject warehouseInfo = new JSONObject();
 		JSONArray warehouseContents = new JSONArray();
 		JSONObject shipmentContents;
 
 		for (Shipment shipment : shipments) {
-			shipmentContents = new JSONObject();
-			
-			String shipmentIDValue = new StringBuilder('"')
-				.append('"')
-				.append(shipment.getShipmentID())
-				.append('"')
-				.toString();
-
-			String freightTypeValue = new StringBuilder('"')
-				.append('"')
-				.append(shipment.getFreight().toString().toLowerCase())
-				.append('"')
-				.toString();
-			
-			shipmentContents.put("shipment_id", shipmentIDValue);
-			shipmentContents.put("shipment_method", freightTypeValue);
-			shipmentContents.put("weight", shipment.getWeight());
-			shipmentContents.put("receipt_date", shipment.getReceiptDate());
-	
+			shipmentContents = shipment.toJSON();
 			warehouseContents.add(shipmentContents);
 		}
-		JSONObject warehouseInfo = new JSONObject();
 		warehouseInfo.put("Warehouse_" + warehouseID, warehouseContents);
 		
+		// Check and create directory
+		if (!file.getParentFile().exists())
+			file.getParentFile().mkdirs();
+		
+		
 		//Write JSON file
-		try (FileWriter file = new FileWriter("warehouse_"+ warehouseID + ".json")) {
-			file.flush();
-			PrintWriter printWriter = new PrintWriter(file);
+		try (FileWriter fw = new FileWriter(filePath)) {
+			fw.flush();
+			PrintWriter printWriter = new PrintWriter(fw);
 			printWriter.println(warehouseInfo.toJSONString());
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-	}
-
-	/**
-	 * Converts milliseconds to a date 
-	 * @param milliDate date in milliseconds
-	 * @return date in simple format
-	 */
-	private String milliToDate(long milliDate) {
-		DateFormat simple = new SimpleDateFormat("dd MMMMM yyyy HH:mm:ss");
-		Date result = new Date(milliDate);
-		return simple.format(result);
 	}
 }

@@ -31,9 +31,15 @@ public class Main {
 	public Main() {
 		warehouseTracker = WarehouseTracker.getInstance();
 		
+		// TODO: use map for commands <command, function>
 		System.out.println("Available Commands:");
 		System.out.println("import <file>");
 		System.out.println("export <file>");
+		System.out.println("warehouse add -- TODO");
+		System.out.println("warehouse delete -- TODO");
+		System.out.println("warehouse enable -- TODO");
+		System.out.println("shipment add -- TODO");
+		System.out.println("shipment assign <warehouse> -- TODO");
 		System.out.println("print");
 		System.out.println("exit");
 	}
@@ -64,6 +70,18 @@ public class Main {
 				case "export":
 					// TODO: specify the file name
 					warehouseTracker.exportWarehouseToJSON(15566);
+					break;
+				case "shipment":
+					switch(arg[1]) {
+						case "add":
+							// calls a to take input from user and "builds" a new shipment
+							System.out.println("Working in progress...");
+							break;
+						case "assign":
+							// parse arg[2] into int (the warehouse ID)
+							System.out.println("Working in progress...");
+							break;
+					}
 					break;
 				case "print":
 					warehouseTracker.printAll();
@@ -101,29 +119,19 @@ public class Main {
 	 * @param shipmentObject shipment object in json
 	 */
 	private void parseWarehouseContentsToObjects(JSONObject shipmentObject) {
-
 		String warehouseString = (String)shipmentObject.get("warehouse_id");
 		int warehouseID = Integer.parseInt(warehouseString);
-		
 		// create warehouse
 		Warehouse warehouse = new Warehouse(warehouseID);
-
-		String shipmentID = (String) shipmentObject.get("shipment_id");
-		FreightType freight = FreightType.valueOf((String)shipmentObject.get("shipment_method").toString().toUpperCase());
-		Number weight = (Number) shipmentObject.get("weight");
-		Number receiptDate = (Number) shipmentObject.get("receipt_date");
-		
 		// build a shipment
 		Shipment shipment = new Shipment.Builder()
-				.id(shipmentID)
-				.type(freight)
-				.weight(weight.doubleValue())
-				.date(receiptDate.longValue())
+				.id((String) shipmentObject.get("shipment_id"))
+				.type(FreightType.valueOf((String)shipmentObject.get("shipment_method").toString().toUpperCase()))
+				.weight(((Number) shipmentObject.get("weight")).doubleValue())
+				.date(((Number) (Number) shipmentObject.get("receipt_date")).longValue())
 				.build();
-
 		// add the warehouse
 		warehouseTracker.addWarehouse(warehouse);
-				
 		// add the shipment to the warehouse
 		warehouseTracker.addShipment(warehouseID, shipment);
 	}
