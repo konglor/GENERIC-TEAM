@@ -10,12 +10,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import com.generic.model.FreightType;
 import com.generic.model.Shipment;
 import com.generic.model.Warehouse;
 import com.generic.tracker.WarehouseTracker;
-
 /**
  * Entry Point
  * 
@@ -32,15 +30,14 @@ public class Main {
 		warehouseTracker = WarehouseTracker.getInstance();
 
 		System.out.println("Available Commands:");
-		System.out.println("1. import <json_file>");
-		System.out.println("2. export <warehouse_id>");
-		System.out.println("3. print <warehouse_id>");
-		System.out.println("4. print*");
-		System.out.println("5. enablef <warehouse_id>");
-		System.out.println("6. disablef <warehouse_id>");
-		System.out.println("7. add <warehouse_id>");
-		System.out.println("8. exit");
-
+		System.out.println("1. import <json_file> (imports a json file from resource folder)");
+		System.out.println("2. export <warehouse_id> (exports a specified warehouse to json)");
+		System.out.println("3. print <warehouse_id> (prints a specified warehouse info)");
+		System.out.println("4. print* (prints all warehouses info)");
+		System.out.println("5. enablef <warehouse_id> (enables a specified warehouse freight receipt)");
+		System.out.println("6. disablef <warehouse_id> (disables a freight receipt)");
+		System.out.println("7. add <warehouse_id> (adds shipment to a specified)");
+		System.out.println("8. exit (spacebar can also be used)");
 		System.out.println();
 
 	}
@@ -55,8 +52,14 @@ public class Main {
 				break;
 
 			String[] arg = in.nextLine().split(" ");
-			String command = arg[0];
-
+			String command;
+			
+			try {
+				command = arg[0];
+			} catch (ArrayIndexOutOfBoundsException e) {
+				break;
+			}
+			
 			switch (command.toLowerCase()) {
 			case "import":
 
@@ -143,7 +146,11 @@ public class Main {
 
 						if (!warehouseTracker.warehouseExists(mWarehouseID)) {
 							System.out.println("** Warehouse with ID #" + mWarehouseID + " does not exist");
-						} else {
+						} else if (!warehouseTracker.freightIsEnabled(mWarehouseID)) {
+							System.out.println("** Warehouse with id #" + mWarehouseID + " freight has ended");
+						}
+						
+						else{
 							boolean added = app.addShipmentOp(mWarehouseID , in);
 							if (!added) {
 								System.out.println("** Shipment could not be added because"
@@ -191,13 +198,12 @@ public class Main {
 			long receiptDate = 0;
 			double weight = 0;
 
-			
 			System.out.print("Enter shipmentID(i.e. iafr4, 15566) -> ");
 			shipmentID = sc.next();
 			
-			// TODO: Validate input for freight type
 			System.out.print("Enter shipment_method(i.e air, truck, ship, rail) -> ");
 			
+			//TODO: 
 			ArrayList<String> shipmentMethodList = new ArrayList<String>(Arrays.asList(new String [] {FreightType.AIR.toString()
 																									, FreightType.RAIL.toString()
 																									, FreightType.TRUCK.toString()
@@ -215,7 +221,6 @@ public class Main {
 				sc.next();
 			}
 			weight = sc.nextDouble();
-			
 			
 			System.out.print("Enter receipt_date(i.e 1515354694451) -> ");
 			while (!sc.hasNextDouble()) {
@@ -238,7 +243,6 @@ public class Main {
 			if (added) {
 				System.out.println("Incoming shipment has been sucessfully added");
 				System.out.print("Would you like to add another shipment to warehouse_" + warehouseID + "?(Y/N) -> ");
-				//ArrayList<String> options = new ArrayList<>(Arrays.asList(new String [] {"Y","y"})); 
 				while (!sc.hasNext()) {
 					System.out.print("Please enter ('Y/N') ->");
 				}
@@ -246,7 +250,6 @@ public class Main {
 			}
 
 		} while (option.equalsIgnoreCase("Y") && added);
-		//sc.close();
 		
 
 		return added;
@@ -268,10 +271,13 @@ public class Main {
 
 		reader.close();
 	}
-
+	
+	public interface Processor {
+			void process(String[] arg); 
+	}
+	
 	/**
 	 * Parses and assigns shipment object for each warehouse
-	 * 
 	 * @param shipmentObject shipment object in json
 	 */
 	private void parseWarehouseContentsToObjects(JSONObject shipmentObject) {
