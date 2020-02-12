@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import com.generic.model.Shipment;
 import com.generic.model.Warehouse;
-
 /**
  * This class will be responsible for tracking
  * a collection of warehouses and the shipments
@@ -37,8 +36,20 @@ public final class WarehouseTracker {
 		return warehouseTracker;
 	}
 	
+		
+	/**
+	 * Create a method that checks if a 
+	 * particular warehouse has it's freight receipt
+	 * enabled
+	 * @param warehouseID the warehouseID
+	 * @return true if added, false if not
+	 */
 	
-	//TODO: Create a method that checks if a particular warehouse has it's freight enabled
+	public boolean freightIsEnabled(int warehouseID) {
+		return warehouses.get(warehouseID).receivingFreight();
+	}
+	
+	
 	
 	/**
 	 * 
@@ -56,6 +67,13 @@ public final class WarehouseTracker {
 		return false;
 	}
 	
+	
+	/**
+	 * Add shipment to a warehouse using warehouseID
+	 * @param warehouseID warehouseID
+	 * @param mShipment shipment to add
+	 * @return re
+	 */
 	public boolean addShipment(int warehouseID, Shipment mShipment) {
 		Warehouse theWarehouse = warehouses.get(warehouseID);
 		if (theWarehouse != null && theWarehouse.receivingFreight()) {
@@ -65,6 +83,13 @@ public final class WarehouseTracker {
 		return false;
 	}
 	
+	
+	/**
+	 * Adds shipment to a warehouse using warehouse object 
+	 * @param theWarehouse warehouseID
+	 * @param mShipment shipment to add
+	 * @return true if added, false if not
+	 */
 	public boolean addShipment(Warehouse theWarehouse, Shipment mShipment) {
 		return addShipment(theWarehouse.getWarehouseID(), mShipment);
 	}
@@ -99,7 +124,6 @@ public final class WarehouseTracker {
 		}
 		return false;
 	}
-	
 	
 	
 
@@ -147,7 +171,6 @@ public final class WarehouseTracker {
 	}
 	
 	
-	
 	/**
 	 * Prints information about a warehouse for user to see.
 	 * @param warehouseID the warehouse id number.
@@ -161,6 +184,9 @@ public final class WarehouseTracker {
 		System.out.println(theWarehouse.toString());
 	}
 	
+	/**
+	 * Prints all available warehouses
+	 */
 	public void printAll() {
 		warehouses.forEach((k, v) -> printWarehouseDetails(k));
 	}
