@@ -187,8 +187,15 @@ public class WarehouseTracker extends PersistentJson {
 		warehouses.forEach((k, v) -> printWarehouseDetails(k));
 	}
 
+	/* this will be unconventional because
+	 * we are trying to reproduce the original file
+	 * and the original file have quite a strange format...
+	 * */
+	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
+	public JSONObject toJSON() {		
+		// FOR CORRECT JSON FORMAT:
+		/* 
 		JSONObject warehouseTracker = new JSONObject();
 		JSONArray warehouseJsonList = new JSONArray();
 		JSONObject warehouseContents;
@@ -200,6 +207,27 @@ public class WarehouseTracker extends PersistentJson {
 			warehouseJsonList.add(warehouseContents);
 		}
 		warehouseTracker.put(id, warehouseJsonList);
+		return warehouseTracker; 
+		*/
+		
+		// FOR REPLICATING ORIGINAL FILE FORMAT:
+		JSONObject warehouseTracker = new JSONObject();
+		JSONArray shipmentJsonList = new JSONArray();
+
+		List<Warehouse> warehousesList = new ArrayList<>(warehouses.values());
+		List<Shipment> shipmentList;
+		
+		for (Warehouse warehouse : warehousesList) {
+			shipmentList = warehouse.getShipmentList();
+			// to reproduce the original file
+			for (Shipment shipment : shipmentList) {
+				JSONObject shipmentJson = shipment.toJSON();
+				// "shipment has-a warehouse instead of warehouse has-many shipments"
+				shipmentJson.put("warehouse_id", warehouse.getId());
+				shipmentJsonList.add(shipmentJson);
+			}
+		}
+		warehouseTracker.put(id, shipmentJsonList);
 		return warehouseTracker;
 	}
 }

@@ -52,6 +52,11 @@ public class Warehouse extends PersistentJson {
 		return freightReceiptEnabled;
 	}
 	
+	public List<Shipment> getShipmentList() {
+		// how to return a const (immutable) ?
+		return shipments;
+	}
+	
 	/**
 	 * Gets the warehouseID
 	 * @return warehouseID
