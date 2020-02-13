@@ -46,8 +46,8 @@ public class Commands {
 		// some annotations here to help users how to use commands
 		commandList.put("import", (arg -> {
 			try {
-				System.out.println(arg);
 				new Persistent().parseJson(new File("resource/" + arg[0]).getAbsolutePath());
+				System.out.println("Sucessfully imported "+arg[0]);
 			} catch (IOException | ParseException e) {
 				System.out.println("** System can not read the file!");
 				e.printStackTrace();

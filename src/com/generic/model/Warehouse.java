@@ -17,7 +17,7 @@ import org.json.simple.JSONObject;
 
 public class Warehouse extends PersistentJson {
 	
-	private static final String WAREHOUSE_DETAIL_FORMAT_STRING = "| WAREHOUSEID: %d| FREIGHT RECEIPT STATUS: %s| SHIPMENT AVALIABLE: %d|";
+	private static final String WAREHOUSE_DETAIL_FORMAT_STRING = "| WAREHOUSEID: %s| FREIGHT RECEIPT STATUS: %s| SHIPMENT AVALIABLE: %d|";
 
 	private boolean freightReceiptEnabled; // freight receipt
 	private List<Shipment> shipments; // List of shipments
