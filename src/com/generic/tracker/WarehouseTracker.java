@@ -21,7 +21,7 @@ public final class WarehouseTracker {
 	private static WarehouseTracker warehouseTracker;
 	
 	// Stores a collection of warehouses mapped by their id 
-	private Map<Integer, Warehouse> warehouses;
+	private Map<String, Warehouse> warehouses;
 
 	// private constructor
 	private WarehouseTracker() {}
@@ -45,7 +45,7 @@ public final class WarehouseTracker {
 	 * @return true if added, false if not
 	 */
 	
-	public boolean freightIsEnabled(int warehouseID) {
+	public boolean freightIsEnabled(String warehouseID) {
 		return warehouses.get(warehouseID).receivingFreight();
 	}
 	
@@ -74,13 +74,18 @@ public final class WarehouseTracker {
 	 * @param mShipment shipment to add
 	 * @return re
 	 */
-	public boolean addShipment(int warehouseID, Shipment mShipment) {
+	public boolean addShipment(String warehouseID, Shipment mShipment) {
 		Warehouse theWarehouse = warehouses.get(warehouseID);
 		if (theWarehouse != null && theWarehouse.receivingFreight()) {
 			theWarehouse.addShipment(mShipment);
 			return true;
 		}
 		return false;
+	}
+	
+	
+	public Warehouse get(String warehouseID) {
+		return warehouses.get(warehouseID);
 	}
 	
 	
@@ -91,7 +96,7 @@ public final class WarehouseTracker {
 	 * @return true if added, false if not
 	 */
 	public boolean addShipment(Warehouse theWarehouse, Shipment mShipment) {
-		return addShipment(theWarehouse.getWarehouseID(), mShipment);
+		return addShipment(theWarehouse.getId(), mShipment);
 	}
 	
 	/**
@@ -101,7 +106,7 @@ public final class WarehouseTracker {
 	 * @return true if freight was successfully
 	 *         enabled, false if not.
 	 */
-	 public boolean enableFreight(int warehouseID) {
+	 public boolean enableFreight(String warehouseID) {
 		 Warehouse theWarehouse = warehouses.get(warehouseID);
 		 if (theWarehouse != null) {
 			 theWarehouse.enableFreight();
@@ -116,7 +121,7 @@ public final class WarehouseTracker {
 	  * @return true if freight was successfully
 	  *         disabled, false if not.
 	  */
-	public boolean endFreight(int warehouseID) {
+	public boolean endFreight(String warehouseID) {
 		Warehouse theWarehouse = warehouses.get(warehouseID);
 		if (theWarehouse != null) {
 			theWarehouse.disableFreight();
@@ -124,8 +129,6 @@ public final class WarehouseTracker {
 		}
 		return false;
 	}
-	
-	
 
 	/**
 	 * Checks if we have an empty collection of warehouses.
@@ -141,24 +144,9 @@ public final class WarehouseTracker {
 	 * @return the size of the warehouse, -1 if
 	 * 		   warehouse doesn't exist
 	 */
-	public int getWarehouseShipmentsSize(int warehouseID) {
+	public int getWarehouseShipmentsSize(String warehouseID) {
 		Warehouse theWarehouse = warehouses.get(warehouseID);
 		return (theWarehouse != null ? theWarehouse.getShipmentSize() : -1);
-	}
-
-	/**
-	 * Exports a warehouse object to JSON file
-	 * @param warehouseID warehouse id
-	 * @param destPath path to write file to
-	 * @return true if warehouse exists, false if not
-	 */
-	public boolean exportWarehouseToJSON (int warehouseID) {
-		Warehouse theWarehouse = warehouses.get(warehouseID);
-		if (theWarehouse != null) {
-			theWarehouse.exportToJSON();
-			return true;
-		}
-		return false;
 	}
 	
 	/**
@@ -166,7 +154,7 @@ public final class WarehouseTracker {
 	 * @param warehouseID warehouse id
 	 * @return true if it does, false if not.
 	 */
-	public boolean warehouseExists (int warehouseID) {
+	public boolean warehouseExists (String warehouseID) {
 		return (warehouses.get(warehouseID) != null);
 	}
 	
@@ -175,7 +163,7 @@ public final class WarehouseTracker {
 	 * Prints information about a warehouse for user to see.
 	 * @param warehouseID the warehouse id number.
 	 */
-	public void printWarehouseDetails(int warehouseID) {
+	public void printWarehouseDetails(String warehouseID) {
 		Warehouse theWarehouse = warehouses.get(warehouseID);
 		if (theWarehouse == null) {
 			System.out.println("Warehouse cannot be found!");

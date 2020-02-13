@@ -1,7 +1,10 @@
 package com.generic.util;
 
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -9,12 +12,14 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.generic.model.FreightType;
+import com.generic.model.PersistentJson;
 import com.generic.model.Shipment;
 import com.generic.model.Warehouse;
 import com.generic.tracker.WarehouseTracker;
 
 public class Persistent {
 
+	// static ?
 	public Persistent() {
 	}
 	
@@ -42,8 +47,7 @@ public class Persistent {
 	private void parseWarehouseContentsToObjects(JSONObject shipmentObject) {
 		WarehouseTracker warehouseTracker = WarehouseTracker.getInstance();
 	
-		String warehouseString = (String) shipmentObject.get("warehouse_id");
-		int warehouseID = Integer.parseInt(warehouseString);
+		String warehouseID = (String) shipmentObject.get("warehouse_id");
 		// create warehouse
 		Warehouse warehouse = new Warehouse(warehouseID);
 		// build a shipment
@@ -56,6 +60,24 @@ public class Persistent {
 		warehouseTracker.addWarehouse(warehouse);
 		// add the shipment to the warehouse
 		warehouseTracker.addShipment(warehouseID, shipment);
+	}
+	
+	public void exportToJSON(PersistentJson jsonObject) {
+		String filePath = "output/warehouse_"+ jsonObject.getId() + ".json";
+		File file = new File(filePath);
+		
+		// Check and create directory
+		if (!file.getParentFile().exists())
+			file.getParentFile().mkdirs();
+		
+		//Write JSON file
+		try (FileWriter fw = new FileWriter(filePath)) {
+			PrintWriter printWriter = new PrintWriter(fw);
+			printWriter.println(jsonObject.toJSON());
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+		
 	}
 
 }
