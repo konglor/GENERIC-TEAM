@@ -120,6 +120,7 @@ public class Warehouse extends PersistentJson {
 		return (shipments.size() == 0);
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public JSONObject toJSON() {
 		JSONObject warehouseInfo = new JSONObject();
