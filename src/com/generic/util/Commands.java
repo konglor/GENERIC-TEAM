@@ -229,7 +229,7 @@ public class Commands {
 
 		} while (option.equalsIgnoreCase("Y") && added);
 		
-
+		sc.close();
 		return added;
 	}
 }
