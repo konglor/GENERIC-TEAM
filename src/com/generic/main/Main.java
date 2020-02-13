@@ -8,6 +8,7 @@ import com.generic.model.FreightType;
 import com.generic.model.Shipment;
 import com.generic.tracker.WarehouseTracker;
 import com.generic.util.Commands;
+import com.generic.util.CommandsException;
 
 /**
  * Entry Point
@@ -45,11 +46,18 @@ public class Main {
 			String[] arguments = Arrays.copyOfRange(arg, 1, arg.length);
 
 			if (cmd.exist(command)) {
-				cmd.execute(command, arguments);
-				continue;
+				try {
+					cmd.execute(command, arguments);
+				} catch(CommandsException ex) {
+					break;
+				}
 			} else {
 				System.out.println("** Invalid command!");
 			}
 		} // End of while loop
+		
+		in.close();
+		
+		System.out.println("Goodbye!");
 	} // End of Main
 }

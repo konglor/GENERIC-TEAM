@@ -23,7 +23,7 @@ public class Commands {
 	
 	private Commands() {}
 	
-	public void execute(String command, String[] args) {
+	public void execute(String command, String[] args) throws CommandsException {
 		commandList.get(command).execute(args);
 	}
 	
@@ -129,7 +129,7 @@ public class Commands {
 		}));
 		
 		commandList.put("exit", (arg -> {
-			System.exit(0);
+			throw new CommandsException("Exit");
 		}));
 		
 		commandList.put("add", (arg -> {
