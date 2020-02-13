@@ -156,6 +156,17 @@ public class Commands {
 						System.out.println("** Please input a warehouse_id");
 			}
 		}));
+		
+		commandList.put("exportall", (arg -> {
+				try {
+					PersistentJson warehouseTracker = WarehouseTracker.getInstance();
+					warehouseTracker.save(warehouseTracker.getId()+".json");
+					
+					System.out.println("Sucessfully exported warehouse");
+				} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+					System.out.println("** Please input a warehouse ID to export");
+				}
+		}));
 	}
 	
 	/**

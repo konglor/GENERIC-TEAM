@@ -68,8 +68,8 @@ public class Shipment extends PersistentJson {
 	@SuppressWarnings("unchecked")
 	public JSONObject toJSON() {
 		JSONObject shipmentJSON = new JSONObject();
-		shipmentJSON.put("shipment_id", id);
 		shipmentJSON.put("shipment_method", freight.toString().toLowerCase());
+		shipmentJSON.put("shipment_id", id);
 		shipmentJSON.put("weight", weight);
 		shipmentJSON.put("receipt_date", receiptDate);
 		
