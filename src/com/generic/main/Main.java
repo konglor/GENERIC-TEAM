@@ -53,9 +53,9 @@ public class Main {
 			switch (command.toLowerCase()) {
 
 			case "enablef":
-				int warehouseID1;
+				String warehouseID1;
 				try {
-					warehouseID1 = Integer.parseInt(arg[1]);
+					warehouseID1 = arg[1];
 					if (!warehouseTracker.isEmpty()) {
 						warehouseTracker.enableFreight(warehouseID1);
 						System.out.println("** Freight enabled for warehouse #" + warehouseID1);
@@ -69,9 +69,9 @@ public class Main {
 				break;
 				
 			case "disablef":
-				int warehouseID2;
+				String warehouseID2;
 				try {
-					warehouseID2 = Integer.parseInt(arg[1]);
+					warehouseID2 = arg[1];
 					if (!warehouseTracker.isEmpty()) {
 						warehouseTracker.endFreight(warehouseID2);
 						System.out.println("** Freight ended for warehouse #" + warehouseID2);
@@ -86,7 +86,7 @@ public class Main {
 
 			case "add":
 				try {
-					int mWarehouseID = Integer.parseInt(arg[1]);
+					String mWarehouseID = arg[1];
 					if (!warehouseTracker.isEmpty()) {
 
 						if (!warehouseTracker.warehouseExists(mWarehouseID)) {
@@ -128,7 +128,7 @@ public class Main {
 	 * @param warehouseID
 	 * @return
 	 */
-	public boolean addShipmentOp(int warehouseID , Scanner sc) {
+	public boolean addShipmentOp(String warehouseID , Scanner sc) {
 
 		
 		//Scanner sc = new Scanner(System.in);

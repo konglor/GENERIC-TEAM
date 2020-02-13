@@ -10,11 +10,10 @@ import org.json.simple.JSONObject;
  * This models a Shipment
  */
 
-public class Shipment {
+public class Shipment extends PersistentJson {
 
 	private static final String SHIPMENT_DETAIl_FORMAT_STRING = "Shipment_Id: %s\n  Weight: %.1f\n  Freight_Type: %s\n  Receipt_Date: %s";
 
-	private String shipmentID; //shipment identification number
 	private FreightType freight; //freight type
 	private double weight; // shipment weight
 	private long receiptDate; //Need to figure out the date format
@@ -27,14 +26,14 @@ public class Shipment {
 	 * @param receiptDate shipment receipt
 	 */
 	private Shipment(String shipmentID, FreightType freight, double weight, long receiptDate) {
-		this.shipmentID = shipmentID;
+		this.id = shipmentID;
 		this.freight = freight;
 		this.weight = weight;
 		this.receiptDate = receiptDate;
 	}
 	
 	public String getShipmentID() {
-		return shipmentID;
+		return id;
 	}
 
 	public FreightType getFreight() {
@@ -61,16 +60,13 @@ public class Shipment {
 	}
 	
 	public String toString() {
-		return String.format(SHIPMENT_DETAIl_FORMAT_STRING, shipmentID, weight, freight.toString().toLowerCase(), milliToDate(receiptDate));
+		return String.format(SHIPMENT_DETAIl_FORMAT_STRING, id, weight, freight.toString().toLowerCase(), milliToDate(receiptDate));
 	}
-	
-	
-	
-	
+
 	@SuppressWarnings("unchecked")
 	public JSONObject toJSON() {
 		JSONObject shipmentJSON = new JSONObject();
-		shipmentJSON.put("shipment_id", shipmentID);
+		shipmentJSON.put("shipment_id", id);
 		shipmentJSON.put("shipment_method", freight.toString().toLowerCase());
 		shipmentJSON.put("weight", weight);
 		shipmentJSON.put("receipt_date", receiptDate);

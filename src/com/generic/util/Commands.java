@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.json.simple.parser.ParseException;
 
+import com.generic.model.PersistentJson;
 import com.generic.tracker.WarehouseTracker;
 
 public class Commands {
@@ -56,11 +57,13 @@ public class Commands {
 		commandList.put("export", (arg -> {
 				WarehouseTracker warehouseTracker = WarehouseTracker.getInstance();
 				try {
-					int mWarehouseID = Integer.parseInt(arg[0]);
+					String mWarehouseID = arg[0];
 					if (!warehouseTracker.warehouseExists(mWarehouseID)) {
 						return;
 					}
-					warehouseTracker.exportWarehouseToJSON(mWarehouseID);
+					PersistentJson warehouse = warehouseTracker.get(mWarehouseID);
+					new Persistent().exportToJSON(warehouse);
+					
 					System.out.println("Sucessfully exported warehouse");
 				} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
 					System.out.println("** Please input a warehouse ID to export");
@@ -68,10 +71,10 @@ public class Commands {
 		}));
 		
 		commandList.put("print", (arg -> {
-				int warehouseID;
+				String warehouseID;
 				try {
 					WarehouseTracker warehouseTracker = WarehouseTracker.getInstance();
-					warehouseID = Integer.parseInt(arg[1]);
+					warehouseID = arg[1];
 					warehouseTracker.printWarehouseDetails(warehouseID);
 				} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
 					System.out.println("** Please input a warehouseID");
