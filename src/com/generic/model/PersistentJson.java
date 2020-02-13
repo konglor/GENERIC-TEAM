@@ -10,6 +10,8 @@ import org.json.simple.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class PersistentJson implements IPersistentJson {
+
+	private static final String OUTPUT_DIR = "output/";
 	
 	protected String id;
 	
@@ -20,7 +22,7 @@ public abstract class PersistentJson implements IPersistentJson {
 	}
 	
 	public void save(String filename) {
-		String filePath = "output/"+ filename;
+		String filePath = OUTPUT_DIR + filename;
 		File file = new File(filePath);
 		
 		// prettify the json output
@@ -29,8 +31,8 @@ public abstract class PersistentJson implements IPersistentJson {
 		// Check and create directory
 		if (!file.getParentFile().exists())
 			file.getParentFile().mkdirs();
-		
-		//Write JSON file
+
+		// Write JSON file
 		try (FileWriter fw = new FileWriter(filePath)) {
 			PrintWriter printWriter = new PrintWriter(fw);
 			String json = mapper
