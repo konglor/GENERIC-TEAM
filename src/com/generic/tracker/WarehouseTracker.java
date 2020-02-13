@@ -1,7 +1,14 @@
 package com.generic.tracker;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import com.generic.model.PersistentJson;
 import com.generic.model.Shipment;
 import com.generic.model.Warehouse;
 /**
@@ -17,7 +24,7 @@ import com.generic.model.Warehouse;
  * @author GENERIC TEAM
  *
  */
-public final class WarehouseTracker {
+public class WarehouseTracker extends PersistentJson {
 	private static WarehouseTracker warehouseTracker;
 	
 	// Stores a collection of warehouses mapped by their id 
@@ -31,6 +38,7 @@ public final class WarehouseTracker {
 			synchronized(WarehouseTracker.class) {
 				warehouseTracker = new WarehouseTracker();
 				warehouseTracker.warehouses = new HashMap<>();
+				warehouseTracker.id = "warehouse_contents";
 			}
 		}
 		return warehouseTracker;
@@ -177,5 +185,21 @@ public final class WarehouseTracker {
 	 */
 	public void printAll() {
 		warehouses.forEach((k, v) -> printWarehouseDetails(k));
+	}
+
+	@Override
+	public JSONObject toJSON() {
+		JSONObject warehouseTracker = new JSONObject();
+		JSONArray warehouseJsonList = new JSONArray();
+		JSONObject warehouseContents;
+
+		List<Warehouse> warehousesList = new ArrayList<>(warehouses.values());
+		
+		for (Warehouse warehouse : warehousesList) {
+			warehouseContents = warehouse.toJSON();
+			warehouseJsonList.add(warehouseContents);
+		}
+		warehouseTracker.put(id, warehouseJsonList);
+		return warehouseTracker;
 	}
 }
