@@ -19,7 +19,7 @@ import com.generic.tracker.WarehouseTracker;
 public class Commands {
 	private static Commands command;
 
-	private static Map<String, Executable> commandList;
+	private Map<String, Executable> commandList;
 	
 	private Commands() {}
 	
@@ -28,25 +28,25 @@ public class Commands {
 	}
 	
 	public static Commands getInstance() {
-		if (commandList == null) {
+		if (command == null) {
 			synchronized(Commands.class) {
 				command = new Commands();
-				commandList = new HashMap<>();
-				init();
+				command.commandList = new HashMap<>();
+				command.init();
 			}
 		}
 		return command;
 	}
 	
-	public static List<String> getCommandList() {
+	public List<String> getCommandList() {
 		return new ArrayList<>(commandList.keySet());
 	}
 	
-	public static boolean exist(String command) {
+	public boolean exist(String command) {
 		return commandList.containsKey(command);
 	}
 	
-	private static void init() {
+	private void init() {
 		// some annotations here to help users how to use commands
 		commandList.put("import", (arg -> {
 			try {
@@ -164,7 +164,7 @@ public class Commands {
 	 * @param warehouseID
 	 * @return
 	 */
-	private static boolean addShipmentOp(String warehouseID) {
+	private boolean addShipmentOp(String warehouseID) {
 		Scanner sc = new Scanner(System.in);
 		WarehouseTracker warehouseTracker = WarehouseTracker.getInstance();
 		boolean added = false;

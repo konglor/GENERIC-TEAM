@@ -18,10 +18,10 @@ import com.generic.util.Commands;
  *
  */
 public class Main {
-	private static WarehouseTracker warehouseTracker = WarehouseTracker.getInstance();
-	private static Commands cmd = Commands.getInstance();
 
-	public Main() {
+	public static Commands cmd = Commands.getInstance();
+
+	public static void welcome() {
 		System.out.println("Available commands:");
 		List<String> cmdList = cmd.getCommandList();
 		for (String cmd : cmdList) {
@@ -30,10 +30,10 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		Main app = new Main();
+		welcome();
 
+		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
-		loop: 
 		while (true) {
 			System.out.print(">> ");
 			if (!in.hasNextLine())
