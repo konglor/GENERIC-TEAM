@@ -61,23 +61,5 @@ public class Persistent {
 		// add the shipment to the warehouse
 		warehouseTracker.addShipment(warehouseID, shipment);
 	}
-	
-	public void exportToJSON(PersistentJson jsonObject) {
-		String filePath = "output/warehouse_"+ jsonObject.getId() + ".json";
-		File file = new File(filePath);
-		
-		// Check and create directory
-		if (!file.getParentFile().exists())
-			file.getParentFile().mkdirs();
-		
-		//Write JSON file
-		try (FileWriter fw = new FileWriter(filePath)) {
-			PrintWriter printWriter = new PrintWriter(fw);
-			printWriter.println(jsonObject.toJSON());
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-		}
-		
-	}
 
 }

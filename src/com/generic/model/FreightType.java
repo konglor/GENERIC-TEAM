@@ -5,4 +5,9 @@ package com.generic.model;
  * @author GENERIC TEAM
  */
 
-public enum FreightType {AIR, TRUCK, SHIP, RAIL;}
+public enum FreightType {
+	AIR, 
+	TRUCK, 
+	SHIP, 
+	RAIL;
+}
