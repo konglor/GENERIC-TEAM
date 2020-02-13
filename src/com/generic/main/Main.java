@@ -1,12 +1,9 @@
 package com.generic.main;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import com.generic.model.FreightType;
-import com.generic.model.Shipment;
-import com.generic.tracker.WarehouseTracker;
+
 import com.generic.util.Commands;
 import com.generic.util.CommandsException;
 
