@@ -95,18 +95,15 @@ public class Warehouse extends PersistentJson {
 		StringBuilder warehouseInfo = new StringBuilder()
 				.append(headerFormat).append("\n")
 				.append(headerString).append("\n")
-				.append(headerFormat).append("\n")
-				.append("          *SHIPMENT RECEIVED*").append("\n")
-				.append("****************************************").append("\n");
+				.append(headerFormat).append("\n");
 		if (!isEmpty()) {
 			int count = 1;
 			for (Shipment shipment : shipments) {
 				String shipmentInfo = shipment.toString();
 				warehouseInfo.append(count++).append(".").append(shipmentInfo).append("\n");
-				warehouseInfo.append("****************************************").append("\n");
 			}
 		} else {
-			warehouseInfo.append("        *NO SHIPMENTS RECEIVED YET*").append("\n");
+			warehouseInfo.append("* NO SHIPMENTS RECEIVED YET*").append("\n");
 		}
 		return warehouseInfo.toString();
 	}

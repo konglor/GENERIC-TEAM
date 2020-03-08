@@ -64,5 +64,6 @@ public class Main {
 		WarehouseTracker tracker = WarehouseTracker.getInstance();
 		tracker.printAll();
 
+		// load new data (xml)
 	} // End of Main
 }
