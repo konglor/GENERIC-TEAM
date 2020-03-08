@@ -23,7 +23,7 @@ public class Commands {
 	
 	private Commands() {}
 	
-	public void execute(String command, String[] args) throws CommandsException {
+	public void execute(String command, String[] args) throws CommandsException, ArrayIndexOutOfBoundsException {
 		commandList.get(command).execute(args);
 	}
 	
@@ -98,7 +98,7 @@ public class Commands {
 				String warehouseID1;
 				WarehouseTracker warehouseTracker = WarehouseTracker.getInstance();
 				try {
-					warehouseID1 = arg[1];
+					warehouseID1 = arg[0];
 					if (!warehouseTracker.isEmpty()) {
 						warehouseTracker.enableFreight(warehouseID1);
 						System.out.println("** Freight enabled for warehouse #" + warehouseID1);
@@ -115,7 +115,7 @@ public class Commands {
 				String warehouseID2;
 				WarehouseTracker warehouseTracker = WarehouseTracker.getInstance();
 				try {
-					warehouseID2 = arg[1];
+					warehouseID2 = arg[0];
 					if (!warehouseTracker.isEmpty()) {
 						warehouseTracker.endFreight(warehouseID2);
 						System.out.println("** Freight ended for warehouse #" + warehouseID2);
@@ -135,7 +135,7 @@ public class Commands {
 		commandList.put("add", (arg -> {
 			WarehouseTracker warehouseTracker = WarehouseTracker.getInstance();
 			try {
-				String mWarehouseID = arg[1];
+				String mWarehouseID = arg[0];
 				if (!warehouseTracker.isEmpty()) {
 	
 					if (!warehouseTracker.warehouseExists(mWarehouseID)) {

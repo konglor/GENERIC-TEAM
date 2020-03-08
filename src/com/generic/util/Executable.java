@@ -1,5 +1,5 @@
 package com.generic.util;
 
 public interface Executable {
-	public void execute(String[] args) throws CommandsException;
+	public void execute(String[] args) throws CommandsException, ArrayIndexOutOfBoundsException;
 }

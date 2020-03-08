@@ -44,7 +44,7 @@ public class Main {
 			if (cmd.exist(command)) {
 				try {
 					cmd.execute(command, arguments);
-				} catch(CommandsException ex) {
+				} catch(CommandsException | ArrayIndexOutOfBoundsException ex) {
 					break;
 				}
 			} else {

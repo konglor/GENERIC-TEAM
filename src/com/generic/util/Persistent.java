@@ -15,7 +15,6 @@ import com.generic.model.WarehouseTracker;
 
 public class Persistent {
 
-	// static ?
 	public Persistent() {
 	}
 	
