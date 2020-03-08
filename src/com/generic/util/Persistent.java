@@ -14,17 +14,13 @@ import com.generic.model.Warehouse;
 import com.generic.model.WarehouseTracker;
 
 public class Persistent {
-
-	public Persistent() {
-	}
-	
 	/**
 	 * Reads a file that is in JSON format containing various shipment information.
 	 * 
 	 * @param filepath the path of JSON file
 	 */
 	@SuppressWarnings("unchecked")
-	public void parseJson(String filepath) throws IOException, ParseException {
+	static public void parseJson(String filepath) throws IOException, ParseException {
 		JSONParser jsonParser = new JSONParser();
 		FileReader reader = new FileReader(filepath);
 
@@ -39,7 +35,7 @@ public class Persistent {
 	 * Parses and assigns shipment object for each warehouse
 	 * @param shipmentObject shipment object in json
 	 */
-	private void parseWarehouseContentsToObjects(JSONObject shipmentObject) {
+	static private void parseWarehouseContentsToObjects(JSONObject shipmentObject) {
 		WarehouseTracker warehouseTracker = WarehouseTracker.getInstance();
 	
 		String warehouseID = (String) shipmentObject.get("warehouse_id");
