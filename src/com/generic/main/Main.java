@@ -19,6 +19,7 @@ public class Main {
 
 	public static Commands cmd = Commands.getInstance();
 
+	@Deprecated
 	public static void welcome() {
 		System.out.println("Available commands:");
 		List<String> cmdList = cmd.getCommandList();
@@ -26,10 +27,9 @@ public class Main {
 			System.out.println(cmd);
 		}
 	}
-
-	public static void main(String[] args) {
-		welcome();
-
+	
+	@Deprecated
+	public static void loop() {
 		Scanner in = new Scanner(System.in);
 		while (true) {
 			System.out.print(">> ");
@@ -54,6 +54,13 @@ public class Main {
 		
 		in.close();
 		
+		System.out.println("Goodbye!");
+	}
+
+	@Deprecated // soon... As the project is transitioning from CLI to FX
+	public static void main(String[] args) {
+		//welcome();
+		//loop();
 		System.out.println("Goodbye!");
 	} // End of Main
 }

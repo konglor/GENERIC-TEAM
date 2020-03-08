@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.simpleframework.xml.Root;
 /**
  * This class will be responsible for tracking
  * a collection of warehouses and the shipments
@@ -20,6 +21,7 @@ import org.json.simple.JSONObject;
  * @author GENERIC TEAM
  *
  */
+
 public class WarehouseTracker extends PersistentJson {
 	private static WarehouseTracker warehouseTracker;
 	
