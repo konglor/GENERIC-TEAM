@@ -39,14 +39,22 @@ public class Persistent {
 		WarehouseTracker warehouseTracker = WarehouseTracker.getInstance();
 	
 		String warehouseID = (String) shipmentObject.get("warehouse_id");
+		
+		// Parsing JSON data
+		String id = (String) shipmentObject.get("shipment_id");
+		FreightType type = FreightType.valueOf((String) shipmentObject.get("shipment_method").toString().toUpperCase());
+		double weight = ((Number) shipmentObject.get("weight")).doubleValue();
+		long date = ((Number)shipmentObject.get("receipt_date")).longValue();
+		
 		// create warehouse
 		Warehouse warehouse = new Warehouse(warehouseID);
 		// build a shipment
 		Shipment shipment = new Shipment.Builder()
-				.id((String) shipmentObject.get("shipment_id"))
-				.type(FreightType.valueOf((String) shipmentObject.get("shipment_method").toString().toUpperCase()))
-				.weight(((Number) shipmentObject.get("weight")).doubleValue())
-				.date(((Number)shipmentObject.get("receipt_date")).longValue()).build();
+				.id(id)
+				.type(type)
+				.weight(weight)
+				.date(date)
+				.build();
 		// add the warehouse
 		warehouseTracker.addWarehouse(warehouse);
 		// add the shipment to the warehouse

@@ -15,7 +15,7 @@ public class Shipment extends PersistentJson {
 	private static final String SHIPMENT_DETAIl_FORMAT_STRING = "Shipment_Id: %s\n  Weight: %.1f\n  Freight_Type: %s\n  Receipt_Date: %s";
 
 	private FreightType freight; //freight type
-	private Weight weight; // shipment weight
+	private Weight weight = new Weight(); // shipment weight
 	private long receiptDate; //Need to figure out the date format
 	
 	/**
@@ -61,7 +61,7 @@ public class Shipment extends PersistentJson {
 	
 	@Override
 	public String toString() {
-		return String.format(SHIPMENT_DETAIl_FORMAT_STRING, id, weight, freight.toString().toLowerCase(), milliToDate(receiptDate));
+		return String.format(SHIPMENT_DETAIl_FORMAT_STRING, id, weight.amount, freight.toString().toLowerCase(), milliToDate(receiptDate));
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class Shipment extends PersistentJson {
 		JSONObject shipmentJSON = new JSONObject();
 		shipmentJSON.put("shipment_method", freight.toString().toLowerCase());
 		shipmentJSON.put("shipment_id", id);
-		shipmentJSON.put("weight", weight);
+		shipmentJSON.put("weight", weight.amount);
 		shipmentJSON.put("receipt_date", receiptDate);
 		
 		return shipmentJSON;

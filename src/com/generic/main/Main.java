@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import com.generic.model.WarehouseTracker;
 import com.generic.util.Commands;
 import com.generic.util.CommandsException;
 
@@ -59,8 +60,9 @@ public class Main {
 
 	@Deprecated // soon... As the project is transitioning from CLI to FX
 	public static void main(String[] args) {
-		//welcome();
-		//loop();
-		System.out.println("Goodbye!");
+		// automatically loads existing data
+		WarehouseTracker tracker = WarehouseTracker.getInstance();
+		tracker.printAll();
+
 	} // End of Main
 }

@@ -1,5 +1,6 @@
 package com.generic.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,7 +8,10 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.simpleframework.xml.Root;
+
+import com.generic.util.Persistent;
 /**
  * This class will be responsible for tracking
  * a collection of warehouses and the shipments
@@ -24,6 +28,7 @@ import org.simpleframework.xml.Root;
 
 public class WarehouseTracker extends PersistentJson {
 	private static WarehouseTracker warehouseTracker;
+	private static final String WAREHOUSE_TRACKER_FILE = "resource/example.json";
 	
 	// Stores a collection of warehouses mapped by their id 
 	private Map<String, Warehouse> warehouses;
@@ -37,11 +42,19 @@ public class WarehouseTracker extends PersistentJson {
 				warehouseTracker = new WarehouseTracker();
 				warehouseTracker.warehouses = new HashMap<>();
 				warehouseTracker.id = "warehouse_contents";
+				try {
+					warehouseTracker.init();
+				} catch (IOException | ParseException ex) {
+					System.out.println("Unable to load persisted data!");
+				}
 			}
 		}
 		return warehouseTracker;
 	}
 	
+	public void init() throws IOException, ParseException {
+		Persistent.parseJson(WAREHOUSE_TRACKER_FILE);
+	}
 		
 	/**
 	 * Create a method that checks if a 
@@ -54,8 +67,6 @@ public class WarehouseTracker extends PersistentJson {
 	public boolean freightIsEnabled(String warehouseID) {
 		return warehouses.get(warehouseID).receivingFreight();
 	}
-	
-	
 	
 	/**
 	 * 
