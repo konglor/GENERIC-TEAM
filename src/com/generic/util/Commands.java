@@ -16,6 +16,7 @@ import com.generic.model.PersistentJson;
 import com.generic.model.Shipment;
 import com.generic.model.WarehouseTracker;
 
+@Deprecated
 public class Commands {
 	private static Commands command;
 
