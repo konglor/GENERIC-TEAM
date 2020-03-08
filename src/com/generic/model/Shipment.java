@@ -15,7 +15,7 @@ public class Shipment extends PersistentJson {
 	private static final String SHIPMENT_DETAIl_FORMAT_STRING = "Shipment_Id: %s\n  Weight: %.1f\n  Freight_Type: %s\n  Receipt_Date: %s";
 
 	private FreightType freight; //freight type
-	private double weight; // shipment weight
+	private Weight weight; // shipment weight
 	private long receiptDate; //Need to figure out the date format
 	
 	/**
@@ -28,7 +28,7 @@ public class Shipment extends PersistentJson {
 	private Shipment(String shipmentID, FreightType freight, double weight, long receiptDate) {
 		this.id = shipmentID;
 		this.freight = freight;
-		this.weight = weight;
+		this.weight.amount = weight;
 		this.receiptDate = receiptDate;
 	}
 	
@@ -41,7 +41,7 @@ public class Shipment extends PersistentJson {
 	}
 
 	public double getWeight() {
-		return weight;
+		return weight.amount;
 	}
 
 	public long getReceiptDate() {

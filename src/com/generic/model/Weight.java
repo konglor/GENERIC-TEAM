@@ -1,8 +1,8 @@
 package com.generic.model;
 
 public class Weight {
-	private WeightType unit;
-	private double weight;
+	public WeightType unit;
+	public double amount;
 	
 	private enum WeightType {
 		KG,
