@@ -11,7 +11,7 @@ import org.json.simple.parser.ParseException;
 import com.generic.model.FreightType;
 import com.generic.model.Shipment;
 import com.generic.model.Warehouse;
-import com.generic.tracker.WarehouseTracker;
+import com.generic.model.WarehouseTracker;
 
 public class Persistent {
 

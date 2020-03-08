@@ -1,4 +1,4 @@
-package com.generic.tracker;
+package com.generic.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,10 +7,6 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
-import com.generic.model.PersistentJson;
-import com.generic.model.Shipment;
-import com.generic.model.Warehouse;
 /**
  * This class will be responsible for tracking
  * a collection of warehouses and the shipments
