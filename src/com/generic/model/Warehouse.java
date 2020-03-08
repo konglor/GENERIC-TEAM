@@ -14,8 +14,9 @@ import org.json.simple.JSONObject;
 
 public class Warehouse extends PersistentJson {
 	
-	private static final String WAREHOUSE_DETAIL_FORMAT_STRING = "| WAREHOUSEID: %s| FREIGHT RECEIPT STATUS: %s| SHIPMENT AVALIABLE: %d|";
+	private static final String WAREHOUSE_DETAIL_FORMAT_STRING = "Warehouse (id: %s, name: %s, status: %s, shipments: %d)\n";
 
+	private String name = "(none)";
 	private boolean freightReceiptEnabled; // freight receipt
 	private List<Shipment> shipments; // List of shipments
 
@@ -90,20 +91,13 @@ public class Warehouse extends PersistentJson {
 	
 	@Override
 	public String toString() {
-		String headerString = String.format(WAREHOUSE_DETAIL_FORMAT_STRING, id, (freightReceiptEnabled) ? "ENABLED" : "ENDED", getShipmentSize());
-		String headerFormat = new String(new char[headerString.length()]).replace("\0", "-");
-		StringBuilder warehouseInfo = new StringBuilder()
-				.append(headerFormat).append("\n")
-				.append(headerString).append("\n")
-				.append(headerFormat).append("\n");
+		String headerString = String.format(WAREHOUSE_DETAIL_FORMAT_STRING, id, name, (freightReceiptEnabled) ? "ENABLED" : "ENDED", getShipmentSize());
+		StringBuilder warehouseInfo = new StringBuilder().append(headerString);
 		if (!isEmpty()) {
-			int count = 1;
 			for (Shipment shipment : shipments) {
 				String shipmentInfo = shipment.toString();
-				warehouseInfo.append(count++).append(".").append(shipmentInfo).append("\n");
+				warehouseInfo.append(shipmentInfo).append("\n");
 			}
-		} else {
-			warehouseInfo.append("* NO SHIPMENTS RECEIVED YET*").append("\n");
 		}
 		return warehouseInfo.toString();
 	}

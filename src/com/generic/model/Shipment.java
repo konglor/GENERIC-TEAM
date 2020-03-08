@@ -12,7 +12,7 @@ import org.json.simple.JSONObject;
 
 public class Shipment extends PersistentJson {
 
-	private static final String SHIPMENT_DETAIl_FORMAT_STRING = "Shipment_Id: %s\n  Weight: %.1f\n  Freight_Type: %s\n  Receipt_Date: %s";
+	private static final String SHIPMENT_DETAIl_FORMAT_STRING = "\t Shipment (id: %s, weight: %.1f,  type: %s,  date: %s)";
 
 	private FreightType freight; //freight type
 	private Weight weight = new Weight(); // shipment weight
